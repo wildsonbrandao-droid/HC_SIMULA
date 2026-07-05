@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HC3 — Anatomia Radiológica | Guia de Estudo</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222c;
+    --accent:#4fd1c5; --accent2:#f6ad55; --danger:#fc8181;
+    --text:#e8eaf0; --muted:#9aa3b2; --border:#2a2f3a; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;background:linear-gradient(180deg,#0b0d11,#12151c 40%);color:var(--text);line-height:1.55;}
+  header{padding:26px 20px 16px;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse at top,#1a2530 0%,transparent 70%);}
+  header h1{margin:0 0 6px;font-size:1.55rem;}
+  header p{margin:0;color:var(--muted);font-size:.92rem;}
+  .badge{display:inline-block;background:var(--accent);color:#08201d;font-weight:700;padding:3px 12px;border-radius:20px;font-size:.78rem;margin-top:8px;margin-right:6px;}
+  .badge.orange{background:var(--accent2);}
+  nav#tabnav{
+    position:fixed;top:0;left:0;height:100vh;width:270px;
+    background:var(--panel);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;gap:6px;
+    padding:70px 14px 20px;overflow-y:auto;
+    transform:translateX(-100%);transition:transform .3s ease;
+    z-index:300;box-shadow:2px 0 20px rgba(0,0,0,.4);
+  }
+  nav#tabnav.open{transform:translateX(0);}
+  nav#tabnav button{background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:10px 14px;border-radius:10px;font-size:.82rem;cursor:pointer;text-align:left;white-space:normal;}
+  nav#tabnav button:hover{border-color:var(--accent);}
+  nav#tabnav button.active{background:var(--accent);color:#08201d;font-weight:700;border-color:var(--accent);}
+  #sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:250;display:none;}
+  #sidebar-backdrop.show{display:block;}
+  #sidebar-toggle{
+    position:fixed;top:14px;left:14px;z-index:350;
+    background:var(--accent);color:#08201d;border:none;border-radius:10px;
+    width:44px;height:44px;font-size:1.3rem;font-weight:700;cursor:pointer;
+    box-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  main{max-width:940px;margin:0 auto;padding:80px 16px 80px;}
+  section{display:none;animation:fade .3s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  h2{font-size:1.3rem;border-left:4px solid var(--accent);padding-left:12px;margin-top:0;}
+  h3{color:var(--accent2);font-size:1.02rem;margin-bottom:6px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;}
+  .card.tip{border-left:4px solid var(--accent);}
+  .card.warn{border-left:4px solid var(--danger);}
+  .card.case{border-left:4px solid #7aa2f7;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr;}}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+  th,td{padding:8px 9px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;}
+  th{color:var(--accent);font-weight:600;background:var(--panel2);}
+  tr:hover td{background:var(--panel2);}
+  ul{padding-left:20px;} li{margin-bottom:5px;}
+  code{background:var(--panel2);border:1px solid var(--border);padding:1px 6px;border-radius:6px;font-size:.85em;}
+  .checklist label{display:flex;align-items:flex-start;gap:10px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:7px;cursor:pointer;font-size:.88rem;}
+  .checklist input{margin-top:3px;accent-color:var(--accent);}
+  .checklist input:checked + span{text-decoration:line-through;color:var(--muted);}
+  .progress-wrap{background:var(--panel2);border-radius:999px;height:9px;overflow:hidden;margin:8px 0 4px;border:1px solid var(--border);}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .3s;}
+  .day{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px;}
+  .day h4{margin:0 0 5px;color:var(--accent);font-size:.98rem;}
+  .tag{display:inline-block;font-size:.7rem;padding:2px 9px;border-radius:999px;background:#26313b;color:var(--accent);margin-right:5px;margin-bottom:4px;}
+  .tag.orange{background:#3a2c1c;color:var(--accent2);}
+  .tag.red{background:#3a2020;color:var(--danger);}
+  .quiz-card{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:13px;}
+  .quiz-opts{display:flex;flex-direction:column;gap:7px;margin-top:9px;}
+  .quiz-opts button{text-align:left;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:8px 11px;border-radius:8px;cursor:pointer;font-size:.85rem;}
+  .quiz-opts button:hover{border-color:var(--accent);}
+  .quiz-opts button.correct{background:#173a2c;border-color:#2f9e6f;}
+  .quiz-opts button.wrong{background:#3a1717;border-color:#a94444;}
+  .quiz-explain{margin-top:9px;font-size:.83rem;color:var(--muted);display:none;border-top:1px dashed var(--border);padding-top:8px;}
+  .score-box{text-align:center;font-weight:700;color:var(--accent);margin-bottom:10px;}
+  .flash{perspective:1200px;height:150px;margin-bottom:14px;cursor:pointer;}
+  .flash-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .flash.flip .flash-inner{transform:rotateY(180deg);}
+  .flash-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;border:1px solid var(--border);font-size:.9rem;}
+  .flash-front{background:var(--panel2);}
+  .flash-back{background:#1c2a2a;transform:rotateY(180deg);color:var(--accent);font-weight:600;}
+  .small{font-size:.8rem;color:var(--muted);}
+  .case-header{font-weight:700;color:#7aa2f7;margin-bottom:4px;}
+  .case-clin{font-style:italic;color:var(--muted);margin-bottom:8px;font-size:.88rem;}
+  .sign-name{color:var(--accent2);font-weight:700;}
+  .img-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0;}
+  .img-box{background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .img-box img{width:100%;display:block;background:#000;}
+  .img-cap{padding:8px 10px;font-size:.78rem;color:var(--muted);}
+  .img-box.wide{grid-column:1/-1;}
+  .single-img{width:100%;border-radius:10px;border:1px solid var(--border);margin:10px 0;background:#000;}
+  .qimg-wrap{background:#000;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:4px 0 12px;text-align:center;}
+  .qimg-wrap img{max-width:100%;max-height:460px;display:inline-block;}
+  .qimg-cap{font-size:.78rem;color:var(--muted);padding:8px 10px;background:var(--panel2);border-top:1px solid var(--border);text-align:left;}
+  .qimg-badge{display:inline-block;font-size:.7rem;padding:2px 9px;border-radius:999px;background:#26313b;color:var(--accent);margin-bottom:6px;}
+  footer{text-align:center;color:var(--muted);font-size:.78rem;padding:20px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<button id="sidebar-toggle" aria-label="Abrir/fechar menu">☰</button>
+<div id="sidebar-backdrop"></div>
+
+<header>
+  <h1>🩻 HC3 — Anatomia Radiológica</h1>
+  <p>Guia sistematizado de Anatomia Radiológica — Procedimentos</p>
+  <span class="badge">Cronograma de estudos</span>
+  <span class="badge orange">Baseado no seu material de aula</span>
+</header>
+
+<nav id="tabnav">
+  <button data-tab="roteiro" class="active">1. Roteiro Oficial</button>
+  <button data-tab="checklist">2. Checklists</button>
+  <button data-tab="tctorax">3. TC Tórax passo a passo</button>
+  <button data-tab="anatomia">4. Anatomia Normal</button>
+  <button data-tab="pescoco">5. Anatomia Pescoço</button>
+  <button data-tab="torax">6. Casos Tórax</button>
+  <button data-tab="cardio">7. Casos Cardíacos</button>
+  <button data-tab="sinais">8. Glossário de Sinais</button>
+  <button data-tab="externo">9. Recursos Externos</button>
+  <button data-tab="avancado">9b. Conceitos Avançados</button>
+  <button data-tab="padroes4">9c. 4 Padrões & IC</button>
+  <button data-tab="laudo">10. Modelo de Resposta</button>
+  <button data-tab="plano">11. Cronograma</button>
+  <button data-tab="quiz">12. Quiz</button>
+  <button data-tab="avalimg">12b. Avaliação com Imagens</button>
+  <button data-tab="flash">13. Flashcards</button>
+  <button data-tab="autoaval">14. Autoavaliação</button>
+</nav>
+
+<main>
+
+<!-- ===================== 1. ROTEIRO OFICIAL ===================== -->
+<section id="roteiro" class="active">
+  <h2>Roteiro sistemático de leitura do RX de tórax</h2>
+  <p class="small">Adaptado de Wada DT, Rodrigues JAH, Santos MK. <em>Aspectos técnicos e roteiro de análise da radiografia de tórax</em>. Medicina (Ribeirão Preto), 2019 — o texto-base do seu material de estudo prévio.</p>
+
+  <div class="card tip">
+    <h3>Por que existe um roteiro fixo?</h3>
+    <p>Seguir sempre a mesma ordem de leitura reduz a chance de deixar passar um achado secundário — inclusive aqueles que não têm relação direta com a queixa clínica do paciente. Antes de procurar a "lesão", confira sempre a técnica do exame.</p>
+  </div>
+
+  <h3>Antes de tudo: os 3 parâmetros técnicos</h3>
+  <div class="card">
+    <table>
+      <tr><th>Parâmetro</th><th>Como checar</th><th>Erro comum</th></tr>
+      <tr><td><strong>Dose/penetração</strong></td><td>Numa PA/AP bem penetrada, só o terço superior da coluna torácica (T1–T3) fica visível</td><td>Muito penetrada = imagem escura; pouco penetrada = imagem clara, coluna toda visível</td></tr>
+      <tr><td><strong>Inspiração</strong></td><td>Devem aparecer de 9 a 11 arcos costais posteriores sobre os campos pulmonares</td><td>Inspiração incompleta pode simular cardiomegalia ou mascarar opacidades</td></tr>
+      <tr><td><strong>Alinhamento</strong></td><td>Bordas mediais das clavículas equidistantes da coluna; escápulas fora dos campos pulmonares (em PA); coluna centrada na imagem</td><td>Rotação distorce a anatomia e pode simular assimetria de transparência entre os hemitórax</td></tr>
+    </table>
+  </div>
+
+  <h3>O roteiro de 8 itens (modelo de laudo normal)</h3>
+  <div class="card">
+    <div class="checklist" id="roteiro-checklist">
+      <label><input type="checkbox"><span><strong>1. Partes moles</strong> — pele, subcutâneo, mamas, região cervical/abdome superior visível</span></label>
+      <label><input type="checkbox"><span><strong>2. Arcabouço ósseo</strong> — coluna, arcos costais, clavículas, escápulas, úmero proximal</span></label>
+      <label><input type="checkbox"><span><strong>3. Mediastino e traqueia</strong> — centrados?</span></label>
+      <label><input type="checkbox"><span><strong>4. Hilos e trama vascular pulmonar</strong> — aspecto habitual, sem redistribuição/cefalização</span></label>
+      <label><input type="checkbox"><span><strong>5. Parênquima pulmonar</strong> — transparência normal, sem opacidades focais ou difusas</span></label>
+      <label><input type="checkbox"><span><strong>6. Cúpulas diafragmáticas e seios costofrênicos</strong> — livres (sem apagamento)</span></label>
+      <label><input type="checkbox"><span><strong>7. Coração</strong> — morfologia e índice cardiotorácico (normal &lt; 0,5 em PA)</span></label>
+      <label><input type="checkbox"><span><strong>8. Aorta</strong> — botão aórtico, ectasia/ateromatose</span></label>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="roteiro-progress"></div></div>
+    <p class="small" id="roteiro-progress-text">0/8 concluído</p>
+    <p class="small">Dica: dispositivos médicos (tubos, drenos, cateteres) são descritos <em>antes</em> do item 1, logo no início do laudo.</p>
+  </div>
+
+  <div class="card warn">
+    <h3>Por que o índice cardiotorácico só vale em PA</h3>
+    <p>Em incidência AP o coração fica mais afastado do detector e sua imagem é ampliada — então medir o índice cardiotorácico numa AP pode indicar falsa cardiomegalia. Só meça em PA, com o paciente em pé e inspirado.</p>
+  </div>
+
+  <h3>Incidências — quando usar cada uma</h3>
+  <div class="card">
+    <table>
+      <tr><th>Incidência</th><th>Quando usar</th></tr>
+      <tr><td>PA + perfil (padrão)</td><td>Protocolo padrão, paciente em pé e inspirado — reduz magnificação cardíaca e tira as escápulas dos campos pulmonares</td></tr>
+      <tr><td>AP</td><td>Paciente impossibilitado de ficar em pé (leito, UTI, criança pequena) — pior qualidade, coração magnificado</td></tr>
+      <tr><td>Decúbito lateral com raios horizontais (Laurel)</td><td>Suspeita de derrame pleural livre ou diferenciação derrame x espessamento</td></tr>
+      <tr><td>Apicolordótica</td><td>Lesões apicais (retira as clavículas dos campos pulmonares)</td></tr>
+      <tr><td>Expiração máxima</td><td>Suspeita de pneumotórax pequeno ou corpo estranho aspirado</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== 2. CHECKLISTS ===================== -->
+<section id="checklist">
+  <h2>Checklists oficiais (RX e TC de tórax)</h2>
+  <p class="small">Baseado no material "Checklist Anatomia Radiológica do Tórax" do seu curso. Use estes checklists ao analisar qualquer imagem nova — praticar com eles é o que a prova vai cobrar.</p>
+
+  <h3>Checklist — Radiografia de tórax</h3>
+  <div class="card">
+    <p class="small">Primeiro identifique: incidência <strong>AP</strong> ou <strong>PA</strong>?</p>
+    <table>
+      <tr><th>Estrutura</th><th>Perguntas a fazer</th></tr>
+      <tr><td>Traqueia</td><td>Está centrada? Alguma alteração de calibre/desvio?</td></tr>
+      <tr><td>Arco aórtico</td><td>Contorno normal? Ectasia?</td></tr>
+      <tr><td>Coração</td><td>Tamanho, forma, índice cardiotorácico</td></tr>
+      <tr><td>Hilos pulmonares D/E</td><td>Tamanho, densidade, posição relativa (hilo E normalmente mais alto que o D)</td></tr>
+      <tr><td>Cúpulas diafragmáticas D/E</td><td>Contorno regular? Cúpula direita normalmente mais alta</td></tr>
+      <tr><td>Seios costofrênicos D/E</td><td>Livres ou apagados (sinal de derrame)?</td></tr>
+      <tr><td>Trama vascular</td><td>Normal, redistribuída ou cefalizada?</td></tr>
+      <tr><td>Lobos pulmonares (5)</td><td>Opacidade ou hipertransparência em algum deles?</td></tr>
+      <tr><td>Costelas</td><td>Fraturas, lesões, contagem de arcos posteriores</td></tr>
+    </table>
+    <p class="small"><strong>Perguntas de fechamento:</strong> Há algo branco demais (radiopaco) onde deveria ser preto? Há algo preto demais (radiotransparente) onde deveria ser branco? Há assimetria entre pulmões, hilos ou seios costofrênicos?</p>
+  </div>
+
+  <h3>Checklist — TC de tórax (2 janelas)</h3>
+  <div class="card">
+    <h4 style="color:var(--accent2);margin-bottom:4px;">Janela de mediastino</h4>
+    <table>
+      <tr><th>Grupo</th><th>Estruturas</th></tr>
+      <tr><td>Parede torácica</td><td>Gordura subcutânea, m. peitoral maior e menor</td></tr>
+      <tr><td>Linfonodos</td><td>Axilares, paratraqueais, subcarinais, aortopulmonares — aumentados se &gt; 1 cm</td></tr>
+      <tr><td>Vasos/grandes artérias</td><td>Arco aórtico, aorta ascendente/descendente, tronco pulmonar, artérias pulmonares D/E, veia cava superior</td></tr>
+      <tr><td>Vias aéreas e esôfago</td><td>Traqueia, brônquios-fonte D/E, esôfago</td></tr>
+    </table>
+    <h4 style="color:var(--accent2);margin:12px 0 4px;">Janela pulmonar</h4>
+    <table>
+      <tr><th>Estrutura</th><th>O que observar</th></tr>
+      <tr><td>Parênquima pulmonar</td><td>Densidade homogênea, sem opacidades</td></tr>
+      <tr><td>Traqueia e brônquios</td><td>Calibre, posição</td></tr>
+      <tr><td>Vasos sanguíneos</td><td>Diferenciar de brônquio: <strong>artéria é normalmente mais calibrosa que o brônquio que a acompanha</strong> (relação invertida = sinal do anel de sinete, sugere bronquiectasia)</td></tr>
+    </table>
+    <p class="small"><strong>Perguntas de fechamento:</strong> Algo hiperdenso onde deveria ser preto? Algo hipodenso onde deveria ser cinza/branco? Assimetria entre artérias pulmonares D/E? Linfonodos aumentados? Desvio de traqueia/brônquios?</p>
+  </div>
+</section>
+
+<!-- ===================== 3. TC TORAX PASSO A PASSO ===================== -->
+<section id="tctorax">
+  <h2>TC de tórax — passo a passo com imagens reais</h2>
+  <p class="small">Do seu roteiro prático de anatomia radiológica do tórax por tomografia + trechos ilustrados de Herring, <em>Radiologia Básica: Aspectos Fundamentais</em>.</p>
+
+  <div class="card tip">
+    <h3>Conceito de janela</h3>
+    <p>"Janela" = ajuste digital de brilho/contraste dos mesmos dados da TC para realçar certas estruturas — não é um novo exame. Sempre comece pela <strong>janela de mediastino</strong>, do exterior (subcutâneo) para o interior (estruturas mediastinais); depois vá para a <strong>janela pulmonar</strong>.</p>
+  </div>
+
+  <h3>1º passo — Janela de mediastino</h3>
+  <div class="img-grid">
+    <div class="img-box"><img src="img/hc3/hc3-001.jpg"><div class="img-cap">Gordura subcutânea (amarela), músculos peitoral maior (azul) e menor (verde), esôfago (roxa). A gordura é mais escura que o músculo.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-002.jpg"><div class="img-cap">Linfonodos axilares (setas amarelas) — normal até 1 cm no eixo; acima disso, linfonodomegalia (nem sempre é câncer).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-003.jpg"><div class="img-cap">Linfonodos paratraqueais (seta amarela).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-004.jpg"><div class="img-cap">Linfonodos da região aortopulmonar (círculo amarelo) — entre o arco aórtico e o tronco pulmonar; geralmente só ficam visíveis quando alterados.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-005.jpg"><div class="img-cap">Linfonodos do espaço subcarinal (seta amarela) — qualquer 'bolinha' cinza aqui deve ser medida (limite 1 cm).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-006.jpg"><div class="img-cap">Linfonodos do espaço subcarinal — outro nível de corte.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-007.jpg"><div class="img-cap">Arco aórtico (amarela) e veia cava superior (azul).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-008.jpg"><div class="img-cap">Tronco pulmonar (roxa), artérias pulmonares D/E, aorta ascendente (verde) e descendente (vermelha).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-009.jpg"><div class="img-cap">Brônquio-fonte direito (amarela) e esquerdo (azul) — janela de mediastino.</div></div>
+  </div>
+
+  <h3>2º passo — Janela pulmonar (parênquima)</h3>
+  <div class="img-grid">
+    <div class="img-box"><img src="img/hc3/hc3-010.jpg"><div class="img-cap">Ápice pulmonar direito (amarela), ápice esquerdo (verde), traqueia (azul) — janela pulmonar.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-011.jpg"><div class="img-cap">Vasos sanguíneos pulmonares (setas azuis) — janela pulmonar.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-012.jpg"><div class="img-cap">Diferenciando vaso de brônquio: brônquio = paredes finas hiperdensas ao redor de lúmen escuro ('anel' com centro preto); vaso = estrutura arredondada homogênea clara.</div></div>
+  </div>
+
+  <div class="card warn">
+    <h3>Regra-chave: brônquio x artéria</h3>
+    <p>Em corte transversal normal, a <strong>artéria pulmonar é mais larga que o brônquio</strong> que a acompanha. Quando essa relação se inverte (brônquio mais largo que a artéria), forma o <span class="sign-name">sinal do anel de sinete</span>, sugestivo de bronquiectasia.</p>
+  </div>
+
+  <h3>Anatomia normal do tórax na TC — conceitos gerais</h3>
+  <div class="card">
+    <p>Por convenção, a TC é vista com o lado direito do paciente à esquerda da tela (como se você estivesse de frente para o paciente). No paciente em decúbito dorsal, o topo da imagem é anterior e o fundo é posterior. Além das janelas de mediastino e pulmão, existe também a <strong>janela óssea</strong>, usada para avaliar estruturas ósseas.</p>
+  </div>
+
+  <div class="img-grid">
+    <div class="img-box wide"><img src="img/hc3/hc3-013.jpg"><div class="img-cap">Fig. 3-11 — Cortes axial, coronal e sagital do tórax. AD: átrio direito; AE: átrio esquerdo; Ao: aorta; AP: artéria pulmonar; S: veia cava superior; VE: ventrículo esquerdo. Os brônquios principais D/E aparecem no corte axial.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-014.jpg"><div class="img-cap">Fig. 3-12 — Projeção de intensidade máxima (PIM) da vascularização pulmonar: pós-processamento que realça estruturas de certa densidade, útil em angio-TC e na busca de nódulos.</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-015.jpg"><div class="img-cap">Fig. 3-13 — Relação brônquio-artéria: a artéria (seta tracejada) é normalmente mais larga que o brônquio (seta sólida).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-016.jpg"><div class="img-cap">Fig. 3-14 — TC coronal/axial na carina: traqueia (T) bifurcando em brônquio-fonte D (BFD) e E (BFE); janela aortopulmonar entre aorta (Ao) e artéria pulmonar (AP).</div></div>
+    <div class="img-box"><img src="img/hc3/hc3-017.jpg"><div class="img-cap">Fig. 3-15 — Brônquio intermediário (BI): segmento distal ao brônquio do lobo superior direito; não deve haver nada além de tecido pulmonar posterior a ele.</div></div>
+  </div>
+</section>
+
+<!-- ===================== 4. ANATOMIA NORMAL ===================== -->
+<section id="anatomia">
+  <h2>Anatomia normal — RX e TC de tórax</h2>
+
+  <div class="card">
+    <h3>Parede torácica e partes moles</h3>
+    <p>Observe mamas (assimetria, ginecomastia em homens), fossas supraclaviculares, transição cervicotorácica e o abdome superior visível na base da imagem: <strong>fígado à direita</strong> e <strong>bolha gástrica à esquerda</strong>, logo abaixo das cúpulas diafragmáticas.</p>
+  </div>
+
+  <div class="card">
+    <h3>Arcabouço ósseo</h3>
+    <p>Na PA: clavículas, ombros, arcos costais e curvatura da coluna. No perfil: coluna torácica e esterno ficam melhor definidos. Os arcos costais aparecem "em dois momentos" — o segmento posterior é mais alto, o anterior mais baixo.</p>
+  </div>
+
+  <div class="card">
+    <h3>Cavidade pleural e seios costofrênicos</h3>
+    <p>O espaço pleural normal é virtual. O <strong>seio costofrênico</strong> é o principal marcador de doença pleural — normalmente forma ângulo agudo, com transparência igual à do pulmão vizinho. Na PA avaliamos os seios laterais; no perfil, os anteriores e posteriores (o posterior é mais profundo e mais sensível para detectar derrames pequenos). A cúpula diafragmática direita costuma ser mais alta que a esquerda.</p>
+  </div>
+
+  <div class="card">
+    <h3>Vias aéreas e hilos pulmonares</h3>
+    <p>A traqueia é central nos jovens, assim como a carina (sua bifurcação). O <strong>brônquio-fonte direito é curto e mais vertical</strong>; o <strong>esquerdo é mais longo e horizontalizado</strong> — só à direita existe o brônquio intermédio. Nos hilos, quem mais aparece são as artérias pulmonares (mais calibrosas e densas que as veias). Regra útil: à direita, o brônquio passa acima da artéria pulmonar; à esquerda, é o contrário — a artéria fica acima do brônquio. O hilo esquerdo costuma estar mais alto que o direito.</p>
+  </div>
+
+  <div class="card">
+    <h3>Silhueta cardiomediastinal (contornos)</h3>
+    <table>
+      <tr><th>Lado</th><th>Contornos (de cima para baixo)</th></tr>
+      <tr><td>Direito</td><td>Veia cava superior → átrio direito</td></tr>
+      <tr><td>Esquerdo</td><td>Botão aórtico → artéria pulmonar (tronco) → ventrículo esquerdo</td></tr>
+    </table>
+    <p class="small">O botão aórtico é o primeiro arco à esquerda (formado pela sobreposição do arco aórtico com o início da aorta descendente).</p>
+  </div>
+
+  <div class="card">
+    <h3>Anatomia cardíaca — visão geral</h3>
+    <p>O coração fica no mediastino médio, atrás do esterno, à frente da coluna (separado dela pelo esôfago e pela aorta), sobre o diafragma e entre os dois pulmões. Formato de cone truncado: ápice para frente/esquerda/baixo, base posterior. Tem 4 câmaras: átrio e ventrículo direitos (recebem sangue das cavas, ejetam no tronco pulmonar) e átrio e ventrículo esquerdos (recebem das veias pulmonares, ejetam na aorta), separadas pelos septos interatrial e interventricular. As válvulas atrioventriculares (mitral, tricúspide) e semilunares (aórtica, pulmonar) controlam o fluxo unidirecional.</p>
+  </div>
+
+  <div class="card">
+    <h3>Índice cardiotorácico</h3>
+    <p>Fórmula: <strong>maior diâmetro transverso do coração ÷ maior diâmetro interno da caixa torácica</strong>, medido em PA. Normal: <strong>&lt; 0,5</strong>. Acima disso sugere cardiomegalia ou derrame pericárdico. Só detecta bem a <strong>hipertrofia excêntrica</strong> (dilatação de câmara) — a <strong>hipertrofia concêntrica</strong> (parede espessada, câmara não dilatada) costuma passar despercebida nesse índice.</p>
+  </div>
+
+  <div class="card">
+    <h3>Angiotomografia de tórax — estruturas cardiovasculares</h3>
+    <p>Sequência de cortes axiais de angio-TC de tórax com contraste, do material do seu curso — útil para treinar o reconhecimento das grandes estruturas vasculares e câmaras cardíacas em diferentes níveis (de cranial para caudal).</p>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-018.jpg"><div class="img-cap">Nível do arco aórtico: veia cava superior (esquerda da imagem) e arco aórtico (direita da imagem).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-019.jpg"><div class="img-cap">Nível um pouco mais caudal: tronco pulmonar, artéria aorta (porções ascendente e torácica/descendente), artérias pulmonares D/E.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-020.jpg"><div class="img-cap">Nível das câmaras cardíacas: átrio direito, átrio esquerdo, ventrículo direito, ventrículo esquerdo, artéria aorta torácica.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-021.jpg"><div class="img-cap">Nível mais caudal dos ventrículos: septo interventricular separando ventrículo direito e esquerdo.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. ANATOMIA DO PESCOÇO ===================== -->
+<section id="pescoco">
+  <h2>Anatomia radiológica do pescoço</h2>
+  <p class="small">Radiografia e TC de pescoço do seu material de estudo prévio (Aula 2A) — fonte: Herring, <em>Radiologia Básica</em>, e radiopaedia.org.</p>
+
+  <div class="card">
+    <h3>Radiografia de pescoço</h3>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-022.jpg"><div class="img-cap">RX de pescoço (perfil) — via aérea superior, estruturas ósseas cervicais e partes moles.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-023.jpg"><div class="img-cap">Detalhe da via aérea superior no RX de pescoço.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>TC de pescoço, plano sagital, janela de partes moles</h3>
+    <p class="small">Imagens com contraste iodado intravenoso.</p>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-024.jpg"><div class="img-cap">Corte sagital — tonsila nasofaríngea (adenoide).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-025.jpg"><div class="img-cap">Corte sagital — via aérea e estruturas cervicais.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-026.jpg"><div class="img-cap">Corte sagital — região da tireoide.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-027.jpg"><div class="img-cap">Corte sagital adicional de partes moles cervicais.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-028.jpg"><div class="img-cap">Corte sagital — nível laríngeo/traqueal superior.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-029.jpg"><div class="img-cap">Corte sagital complementar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-030.jpg"><div class="img-cap">Corte sagital complementar — plano de partes moles.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-031.jpg"><div class="img-cap">Corte sagital complementar — plano de partes moles.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>TC axial de pescoço e crânio/face — estruturas para identificar</h3>
+    <p class="small">Baseado no seu pré-teste: pratique nomear estas estruturas em cortes axiais.</p>
+    <table>
+      <tr><th>Estrutura</th><th>Como reconhecer</th></tr>
+      <tr><td>Veia jugular externa / interna</td><td>Estruturas vasculares cervicais, geralmente ântero-laterais</td></tr>
+      <tr><td>Lobo da tireoide</td><td>Tecido de partes moles anterior à traqueia, na altura cervical baixa</td></tr>
+      <tr><td>Artéria carótida comum</td><td><strong>Hiperdensa</strong> em relação às estruturas vizinhas — bem vascularizada, atenua mais a radiação (realça com contraste iodado)</td></tr>
+      <tr><td>Epiglote / traqueia</td><td>Estruturas da via aérea superior, na linha média</td></tr>
+      <tr><td>Seio frontal / septo nasal</td><td>Estruturas ósseas/aeradas da face, em cortes mais cranianos</td></tr>
+      <tr><td>Arco zigomático / processo mastóideo</td><td>Referências ósseas laterais do crânio/face</td></tr>
+    </table>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-032.jpg"><div class="img-cap">Corte axial de pescoço/crânio — treine nomear as estruturas da tabela acima.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-033.jpg"><div class="img-cap">Corte axial adicional de pescoço.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-034.jpg"><div class="img-cap">Corte axial — região cervical.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-035.jpg"><div class="img-cap">Corte axial — região cervical/tireoide.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-036.jpg"><div class="img-cap">Corte axial — nível da tireoide/carótidas.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-037.jpg"><div class="img-cap">Corte axial complementar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-038.jpg"><div class="img-cap">Corte axial complementar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-039.jpg"><div class="img-cap">Corte axial de crânio/face — seio frontal, septo nasal.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-040.jpg"><div class="img-cap">Corte axial de crânio/face — arco zigomático, processo mastóideo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-041.jpg"><div class="img-cap">Corte axial complementar de crânio/face.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-042.jpg"><div class="img-cap">Corte axial complementar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-043.jpg"><div class="img-cap">Corte axial complementar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-044.jpg"><div class="img-cap">Corte axial complementar.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. CASOS TÓRAX ===================== -->
+<section id="torax">
+  <h2>Casos discutidos em grupo — Tórax</h2>
+  <p class="small">Casos reais do seu material de discussão em grupo (02/06 e 16/06). Estude o raciocínio: dado clínico → achado de imagem → padrão → diagnóstico.</p>
+
+  <div class="card case">
+    <div class="case-header">Caso — Pneumatocele vs. abscesso pulmonar</div>
+    <div class="case-clin">Criança, 2 anos, infecção pulmonar recente, melhora gradual.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-045.jpg"><div class="img-cap">RX e TC — pneumatocele: massa cística arredondada, bem delimitada, radiolucente, lobo superior direito, com nível hidroaéreo.</div></div>
+    </div>
+    <p>Achado: massa cística arredondada, bem delimitada, parede fina/lisa/regular, radiolucente, no lobo superior direito, com nível hidroaéreo.</p>
+    <table>
+      <tr><th>Pneumatocele</th><th>Abscesso pulmonar</th></tr>
+      <tr><td>Parede <strong>fina, lisa e regular</strong></td><td>Parede <strong>espessa e frequentemente irregular</strong></td></tr>
+      <tr><td>Espaço cístico com gás no parênquima</td><td>Coleção de gás/fluido com tecido necrótico central (hipodenso no centro, hiperdenso na periferia após contraste)</td></tr>
+      <tr><td>Nível hidroaéreo pode ou não estar presente</td><td>Contexto de infecção mais agressiva/grave</td></tr>
+    </table>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Abscesso pulmonar com cavitação</div>
+    <div class="case-clin">Criança, 6 anos, febre há 7 dias, tosse, temperatura até 40,6°C, vômito pós-tussígeno.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-046.jpg"><div class="img-cap">RX e TC — consolidação hiperdensa arredondada no lobo superior direito, com pequenos focos de ar dispersos.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-047.jpg"><div class="img-cap">TC — cavidade com nível hidroaéreo dentro da consolidação (abscesso).</div></div>
+    </div>
+    <p>RX: opacidade circular no lobo superior direito. TC: consolidação hiperdensa arredondada, com áreas de atenuação reduzida, pequenos focos de ar dispersos e cavidade com nível hidroaéreo.</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Derrame pleural (2 pacientes)</div>
+    <div class="case-clin">Homem 40a, dor torácica ventilatório-dependente e dispneia leve à esquerda / Homem 35a, infecção pulmonar anterior, dor torácica à direita.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-048.jpg"><div class="img-cap">RX de tórax — apagamento do ângulo costofrênico esquerdo, sinal do menisco.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-049.jpg"><div class="img-cap">RX de tórax — apagamento do ângulo costofrênico direito, sinal do menisco (outro paciente).</div></div>
+    </div>
+    <p>Achado clássico: apagamento do ângulo costofrênico com <span class="sign-name">sinal do menisco</span> (linha côncava voltada para cima) — indica derrame pleural livre.</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Pneumotórax espontâneo</div>
+    <div class="case-clin">Homem, 35 anos, dispneia aos esforços e fadiga / Mulher, 13 anos, falta de ar repentina e dor torácica à direita.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-050.jpg"><div class="img-cap">RX — pneumotórax extenso à esquerda, hipertransparência sem trama vascular, colapso pulmonar total.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-051.jpg"><div class="img-cap">RX e TC — pneumotórax à direita, linha pleural visceral visível, colapso parcial.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-052.jpg"><div class="img-cap">Detalhe complementar — pneumotórax.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-053.jpg"><div class="img-cap">Detalhe complementar — pneumotórax.</div></div>
+    </div>
+    <p>Achado: área de <strong>hipertransparência</strong> (mais preta que o normal) no hemitórax afetado, <strong>sem trama vascular</strong>, com colapso pulmonar (total ou parcial) e <strong>linha pleural visceral</strong> visível (borda fina e branca do pulmão colabado).</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — DPOC / Enfisema</div>
+    <div class="case-clin">Paciente, 65 anos, dispneia, tabagista há 50 anos.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-054.jpg"><div class="img-cap">RX PA e perfil — hiperinsuflação, tórax em barril, aumento do diâmetro ântero-posterior.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-055.jpg"><div class="img-cap">TC — enfisema: destruição das paredes alveolares, espaços hipodensos cheios de ar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-056.jpg"><div class="img-cap">Detalhe complementar — DPOC/enfisema.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-057.jpg"><div class="img-cap">Detalhe complementar — DPOC/enfisema.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-058.jpg"><div class="img-cap">Detalhe complementar — DPOC/enfisema.</div></div>
+    </div>
+    <p>RX: hiperinsuflação, espessamento broncovascular, aumento do diâmetro ântero-posterior ("tórax em barril"). TC: destruição das paredes alveolares com fusão alveolar, formando espaços cheios de ar (hipodensidade) — padrão de enfisema.</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Pneumonia com broncograma aéreo</div>
+    <div class="case-clin">Homem, 55 anos, tosse, dispneia, febre há 4 dias.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-059.jpg"><div class="img-cap">TC — opacidade do espaço aéreo à direita (lobos superior e médio) com broncograma aéreo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-060.jpg"><div class="img-cap">TC — detalhe complementar do broncograma aéreo.</div></div>
+    </div>
+    <p>TC: opacidade do espaço aéreo à direita (lobos superior e médio) com <span class="sign-name">broncograma aéreo</span> — ar dentro dos brônquios contrastando com o parênquima consolidado ao redor.</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — COVID-19 (opacidade em vidro fosco)</div>
+    <div class="case-clin">Mulher, 70 anos, falta de ar, admitida no PS.</div>
+    <div class="img-grid">
+      <div class="img-box wide"><img src="img/hc3/hc3-061.jpg"><div class="img-cap">RX (aumento da trama pulmonar nas bases) e TC (opacidades bilaterais em vidro fosco, com vasos ainda visíveis).</div></div>
+      <div class="img-box wide"><img src="img/hc3/hc3-062.jpg"><div class="img-cap">Tabela comparativa: opacidade em vidro fosco x consolidação pulmonar.</div></div>
+    </div>
+    <p>RX: aumento da densidade da trama pulmonar, mais evidente nas bases, sem consolidação clara. TC: opacidades bilaterais em <strong>vidro fosco</strong> — brônquios e vasos ainda visíveis através da opacidade.</p>
+  </div>
+
+  <div class="card">
+    <h3>Como diferenciar vidro fosco de consolidação</h3>
+    <table>
+      <tr><th>Característica</th><th>Vidro fosco</th><th>Consolidação</th></tr>
+      <tr><td>Densidade</td><td>Aumento sutil (hipotransparência leve)</td><td>Hiperdenso, bem mais branco</td></tr>
+      <tr><td>Vasos/brônquios</td><td>Continuam visíveis através da opacidade</td><td>Obscurecidos pela densidade</td></tr>
+      <tr><td>Broncograma aéreo</td><td>Raro/sutil</td><td>Comum e nítido</td></tr>
+      <tr><td>Mecanismo</td><td>Preenchimento parcial alveolar + espessamento septal</td><td>Preenchimento completo do espaço aéreo</td></tr>
+      <tr><td>Causas típicas</td><td>Pneumonia viral (COVID), fibrose inicial, edema leve</td><td>Pneumonia bacteriana, edema grave, hemorragia, aspiração</td></tr>
+    </table>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Trauma torácico: pneumomediastino + enfisema subcutâneo</div>
+    <div class="case-clin">Homem, 25 anos, trauma fechado (atropelamento), choque, ventilação assimétrica.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-063.jpg"><div class="img-cap">RX — enfisema subcutâneo (linhas radiolucentes nos tecidos moles) e pneumomediastino (radiolucência contornando o mediastino).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-064.jpg"><div class="img-cap">TC — pneumomediastino, pneumotórax bilateral, enfisema subcutâneo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-065.jpg"><div class="img-cap">TC coronal — sinal do diafragma contínuo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-066.jpg"><div class="img-cap">TC — detalhe complementar do caso de trauma.</div></div>
+    </div>
+    <p><strong>Enfisema subcutâneo:</strong> gás nos tecidos moles, visto como linhas radiolucentes. <strong>Pneumomediastino:</strong> pequenas quantidades de gás contornando estruturas mediastinais como linhas radiolucentes lineares. Achado associado: <span class="sign-name">sinal do diafragma contínuo</span> (o ar mediastinal permite visualizar toda a extensão do diafragma numa única linha contínua).</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Pneumonia em evolução (viagem recente)</div>
+    <div class="case-clin">Mulher, 35 anos, 5 dias de febre e sudorese, desconforto respiratório à direita, viagem recente.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-067.jpg"><div class="img-cap">RX/TC iniciais — consolidação densa em lobo superior direito com broncograma aéreo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-068.jpg"><div class="img-cap">RX de evolução (5 dias).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-069.jpg"><div class="img-cap">RX de acompanhamento (3 meses) — resolução completa da consolidação.</div></div>
+    </div>
+    <p>Consolidação densa em lobo superior direito com broncograma aéreo. Acompanhamento: redução da consolidação assumindo forma cuneiforme lateral; após 3 meses, resolução completa — mostra a evolução esperada de uma pneumonia tratada adequadamente.</p>
+  </div>
+</section>
+
+<!-- ===================== 5. CASOS CARDÍACOS ===================== -->
+<section id="cardio">
+  <h2>Casos discutidos em grupo — Cardiovascular</h2>
+
+  <div class="card case">
+    <div class="case-header">Caso — Cardiomegalia / Estenose aórtica congênita</div>
+    <div class="case-clin">Homem, 50 anos, dispneia progressiva e fadiga / Criança 5 anos, palpitações, estenose de aorta na eco.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-070.jpg"><div class="img-cap">RX (homem 50a, dispneia) — imagens não são do mesmo paciente da TC ao lado.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-071.jpg"><div class="img-cap">TC (criança 5a, estenose de aorta na eco).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-072.jpg"><div class="img-cap">Esquema + sinal de Shmoo: dilatação do VE desloca o ápice cardíaco; aumento do VE + dilatação da aorta na PA.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-073.jpg"><div class="img-cap">TC — estenose aórtica: parede ventricular espessa (hipertrofia concêntrica), dilatação do VE, derrame pleural associado.</div></div>
+    </div>
+    <p>A dilatação do ventrículo esquerdo desloca o ápice cardíaco lateral e inferiormente na radiografia frontal — correlação direta com <strong>ictus cordis difuso e desviado</strong> no exame físico. Na TC, a estenose aórtica mostra parede ventricular espessa (hipertrofia concêntrica), dilatação do VE e pode haver derrame pleural associado (hiperdensidade nas bases).</p>
+    <p><span class="sign-name">Sinal de Shmoo</span>: configuração do coração com VE aumentado + aorta dilatada na PA, lembrando o formato do personagem de quadrinho "Shmoo" — corpo (borda cardíaca esquerda proeminente) e cabeça (aorta dilatada).</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Derrame pericárdico</div>
+    <div class="case-clin">Mulher, 48 anos, falta de ar e aperto no peito há 1 semana, leucemia linfocítica crônica.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-074.jpg"><div class="img-cap">RX PA/perfil — silhueta cardíaca globular aumentada (leucemia linfocítica crônica).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-075.jpg"><div class="img-cap">TC axial — derrame pericárdico.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-076.jpg"><div class="img-cap">Sinal da garrafa d'água: silhueta cardíaca globular no RX.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-077.jpg"><div class="img-cap">Sinal do biscoito Oreo na TC: líquido pericárdico entre a gordura para e epicárdica; correlação com exame físico.</div></div>
+    </div>
+    <p>RX: silhueta cardíaca aumentada em formato globular — <span class="sign-name">sinal da garrafa d'água</span> (o pericárdio distendido pelo líquido lembra uma cantil antiga; geralmente precisa de mais de 200 mL para ficar visível no RX simples). Na TC, o líquido pericárdico aparece delimitado pela gordura paracárdica e epicárdica, formando três camadas — <span class="sign-name">sinal do biscoito Oreo</span>.</p>
+    <p><strong>Correlação com exame físico:</strong> bulhas hipofonéticas (o líquido amortece a transmissão do som) e turgência jugular (a pressão intrapericárdica comprime o átrio direito, dificultando o retorno venoso).</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Aneurisma de aorta torácica</div>
+    <div class="case-clin">Mulher, 75 anos, achado incidental em RX de tórax.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-078.jpg"><div class="img-cap">TC axial e sagital — aneurisma de aorta torácica descendente, achado incidental.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-079.jpg"><div class="img-cap">TC — lúmen da aorta preenchido por contraste, dilatação focal do lúmen, placas ateroscleróticas.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-080.jpg"><div class="img-cap">Reconstrução 3D e corte sagital — ramos do arco aórtico e localização do aneurisma.</div></div>
+    </div>
+    <p>TC com contraste: dilatação focal do lúmen da aorta preenchido por contraste, frequentemente com placas ateroscleróticas na parede do aneurisma e artérias adjacentes. Correlação com exame físico: sopro aórtico.</p>
+    <p class="small">Ramos do arco aórtico a memorizar na TC: tronco braquiocefálico → artéria carótida comum esquerda → artéria subclávia esquerda.</p>
+  </div>
+
+  <div class="card case">
+    <div class="case-header">Caso — Tromboembolismo pulmonar (TEP)</div>
+    <div class="case-clin">Homem, 50 anos, dor torácica, dispneia, pré-síncope, dor na panturrilha esquerda após voo longo. Hipóxia, taquicardia.</div>
+    <div class="img-grid">
+      <div class="img-box"><img src="img/hc3/hc3-081.jpg"><div class="img-cap">RX e TC — homem 50a, dor torácica e dispneia após voo longo.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-082.jpg"><div class="img-cap">Sinal de Palla no RX (artéria pulmonar descendente D proeminente).</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-083.jpg"><div class="img-cap">TC com contraste — falha de enchimento (trombo hipodenso) na artéria pulmonar.</div></div>
+      <div class="img-box"><img src="img/hc3/hc3-084.jpg"><div class="img-cap">Correlação com exame físico: hiperfonia de B2, hipoxemia, taquicardia.</div></div>
+    </div>
+    <p>RX: artéria pulmonar descendente direita proeminente — <span class="sign-name">sinal de Palla</span>. TC com contraste: falha de enchimento (trombo hipodenso) na porção distal da artéria pulmonar principal.</p>
+    <p><strong>Correlação com exame físico:</strong> hiperfonia de B2 (por hipertensão pulmonar aguda), hipoxemia, taquicardia.</p>
+  </div>
+
+  <div class="card tip">
+    <h3>O que a prova provavelmente vai cobrar sobre cardiovascular</h3>
+    <ul>
+      <li>Identificar as estruturas anatômicas cardiovasculares em RX/TC</li>
+      <li>Reconhecer os sinais radiológicos: Shmoo, biscoito Oreo, garrafa d'água, Palla</li>
+      <li>Identificar falhas de enchimento sugestivas de TEP na TC</li>
+      <li>Correlacionar cada sinal radiológico com o achado esperado no exame físico</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 6. GLOSSÁRIO DE SINAIS ===================== -->
+<section id="sinais">
+  <h2>Glossário de sinais radiológicos</h2>
+  <div class="card">
+    <table>
+      <tr><th>Sinal</th><th>Onde aparece</th><th>Significado</th></tr>
+      <tr><td><span class="sign-name">Sinal do menisco</span></td><td>RX tórax, seio costofrênico</td><td>Linha côncava voltada para cima no ângulo costofrênico apagado → derrame pleural</td></tr>
+      <tr><td><span class="sign-name">Sinal de Shmoo</span></td><td>RX tórax PA</td><td>Aumento do VE + dilatação da aorta, lembrando o personagem "Shmoo" → cardiomegalia por sobrecarga esquerda</td></tr>
+      <tr><td><span class="sign-name">Sinal da garrafa d'água</span></td><td>RX tórax PA</td><td>Silhueta cardíaca globular e aumentada → derrame pericárdico volumoso (geralmente &gt; 200 mL)</td></tr>
+      <tr><td><span class="sign-name">Sinal do biscoito Oreo</span></td><td>TC tórax, janela mediastino</td><td>Líquido pericárdico entre as camadas de gordura para- e epicárdica, formando aspecto de 3 camadas → derrame pericárdico</td></tr>
+      <tr><td><span class="sign-name">Sinal de Palla</span></td><td>RX tórax PA</td><td>Artéria pulmonar descendente direita proeminente/aumentada → sugestivo de TEP</td></tr>
+      <tr><td><span class="sign-name">Sinal do diafragma contínuo</span></td><td>RX tórax</td><td>Ar no mediastino (pneumomediastino) permite ver o diafragma como linha contínua de um lado a outro</td></tr>
+      <tr><td><span class="sign-name">Sinal do anel de sinete</span></td><td>TC tórax, janela pulmonar</td><td>Brônquio mais largo que a artéria que o acompanha (inverte a relação normal) → sugestivo de bronquiectasia</td></tr>
+      <tr><td><span class="sign-name">Broncograma aéreo</span></td><td>RX/TC tórax</td><td>Ar dentro dos brônquios contrastando com o parênquima consolidado ao redor → consolidação (ex: pneumonia)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== 9. RECURSOS EXTERNOS ===================== -->
+<section id="externo">
+  <h2>Recursos externos para complementar</h2>
+  <p class="small">O site <a href="https://radiologia.online/torax/" target="_blank" style="color:var(--accent);">radiologia.online/torax</a> tem galerias de imagens comentadas e atualizadas — melhor consultar direto lá do que eu copiar as imagens deles aqui, porque o conteúdo é proprietário do site (pago/autoral) e atualiza com frequência. Deixei os links diretos organizados por assunto.</p>
+
+  <div class="card tip">
+    <h3>Radiology Assistant (radiologyassistant.nl) — recomendado</h3>
+    <p>Referência internacional consagrada, mantida por radiologistas holandeses, gratuita e com casos reais muito bem explicados (usei o conteúdo dela para montar a aba "Conceitos Avançados" e novos casos na Autoavaliação).</p>
+    <table>
+      <tr><th>Página</th><th>Conteúdo</th></tr>
+      <tr><td><a href="https://radiologyassistant.nl/chest/chest-x-ray/basic-interpretation" target="_blank" style="color:var(--accent);">Chest X-Ray — Basic Interpretation</a></td><td>Anatomia normal, sinal da silhueta, áreas escondidas, câmaras cardíacas, hilos, mediastino, pneumotórax — a base da aba "Conceitos Avançados"</td></tr>
+      <tr><td><a href="https://radiologyassistant.nl/chest/chest-x-ray/heart-failure" target="_blank" style="color:var(--accent);">Chest X-Ray — Heart Failure</a></td><td>Padrões radiológicos de insuficiência cardíaca (redistribuição vascular, linhas B de Kerley, edema)</td></tr>
+      <tr><td><a href="https://radiologyassistant.nl/chest/chest-x-ray/lung-disease" target="_blank" style="color:var(--accent);">Chest X-Ray — Lung Disease</a></td><td>Abordagem por 4 padrões: consolidação, atelectasia, nódulo/massa, padrão intersticial</td></tr>
+      <tr><td><a href="https://radiologyassistant.nl/chest/mediastinum/masses-differential-diagnosis" target="_blank" style="color:var(--accent);">Mediastinal Masses</a></td><td>Diagnóstico diferencial de massas mediastinais por compartimento (os "4 T's" e outros)</td></tr>
+      <tr><td><a href="https://radiologyassistant.nl/cardiovascular/anatomy/cardiac-anatomy" target="_blank" style="color:var(--accent);">Cardiac Anatomy</a></td><td>Anatomia cardíaca detalhada em TC/RM</td></tr>
+    </table>
+    <p class="small">Site em inglês, mas o vocabulário técnico é bem parecido com o português — vale treinar reconhecer os termos nos dois idiomas.</p>
+  </div>
+
+  <div class="card">
+    <h3>Tórax — radiologia.online</h3>
+    <table>
+      <tr><th>Página</th><th>Conteúdo</th></tr>
+      <tr><td><a href="https://radiologia.online/anatomia-tc-torax/" target="_blank" style="color:var(--accent);">Anatomia: TC de Tórax</a></td><td>Galeria comentada de anatomia normal do tórax por TC — bom complemento visual ao seu roteiro prático</td></tr>
+      <tr><td><a href="https://radiologia.online/torax/patologias-toracicas-infecciosas/" target="_blank" style="color:var(--accent);">Patologias Torácicas Infecciosas</a></td><td>Pneumonias, abscesso, tuberculose — reforça os casos de consolidação/broncograma do seu material</td></tr>
+      <tr><td><a href="https://radiologia.online/torax/doencas-pulmonares-difusas/" target="_blank" style="color:var(--accent);">Doenças Pulmonares Difusas</a></td><td>Padrões intersticiais, vidro fosco, enfisema — reforça DPOC e COVID</td></tr>
+      <tr><td><a href="https://radiologia.online/torax/vias-aereas/" target="_blank" style="color:var(--accent);">Vias Aéreas</a></td><td>Traqueia, brônquios — reforça a anatomia de vias aéreas do roteiro de TC</td></tr>
+    </table>
+  </div>
+
+  <div class="card tip">
+    <h3>Como usar esses sites no seu estudo</h3>
+    <p>Abra a página ao lado do seu guia e aplique o roteiro de 8 itens (aba 1) em cada imagem nova que encontrar lá — isso é o treino mais parecido com o que a prova vai cobrar: reconhecer estrutura/achado numa imagem que você nunca viu antes, não decorar as imagens do seu material.</p>
+  </div>
+</section>
+
+<!-- ===================== 9b. CONCEITOS AVANÇADOS ===================== -->
+<section id="avancado">
+  <h2>Conceitos avançados — Radiology Assistant</h2>
+  <p class="small">Não consigo baixar as imagens específicas dessa página (minha ferramenta não retorna o conteúdo binário de imagens de sites externos), mas consegui ler o artigo inteiro. É uma referência internacional muito respeitada em educação radiológica — vale abrir o link ao lado do seu guia e olhar as imagens reais enquanto lê estes conceitos. Fonte: <a href="https://radiologyassistant.nl/chest/chest-x-ray/basic-interpretation" target="_blank" style="color:var(--accent);">radiologyassistant.nl — Chest X-Ray: Basic Interpretation</a> (Smithuis & van Delden).</p>
+
+  <h3>Abordagem "de dentro para fora" (inside-out)</h3>
+  <div class="card">
+    <p>Uma variação do roteiro sistemático: em vez de ir da periferia para o centro, começa pelas estruturas centrais e vai para fora. É especialmente útil quando o achado principal está em uma estrutura central (traqueia, mediastino):</p>
+    <ol>
+      <li><strong>Traqueia e vias aéreas centrais</strong> — posição e calibre; desvio sugere efeito de massa, perda de volume ou desvio mediastinal</li>
+      <li><strong>Mediastino e coração</strong> — contornos, índice cardiotorácico (&gt;0,5 sugere cardiomegalia), aorta</li>
+      <li><strong>Hilos</strong> — tamanho, posição, densidade; assimetria sugere linfonodomegalia ou massa</li>
+      <li><strong>Pulmões e pleura</strong> — opacidades, nódulos, padrão intersticial, derrame, pneumotórax</li>
+      <li><strong>Diafragma e região subdiafragmática</strong> — altura, contorno, ar livre</li>
+      <li><strong>Parede torácica e partes moles</strong> — fraturas, lesões líticas/escleróticas, enfisema subcutâneo</li>
+      <li><strong>Abdome superior</strong> — gás, calcificações, organomegalia visível</li>
+    </ol>
+  </div>
+
+  <h3>Sinal da silhueta (silhouette sign)</h3>
+  <div class="card tip">
+    <p>Quando duas estruturas de densidades diferentes encostam uma na outra, a borda entre elas fica nítida. Se uma patologia (ex: consolidação) tem a <strong>mesma densidade de água</strong> e encosta numa estrutura como o coração, a borda desaparece — isso localiza a lesão.</p>
+    <ul>
+      <li><strong>Borda do VE desaparece</strong> → lesão na língula (lobo superior esquerdo, porção anterior)</li>
+      <li><strong>Borda do coração preservada, mas há opacidade mais posterior</strong> → lesão no lobo inferior esquerdo (não encosta no coração)</li>
+      <li><strong>Borda do AD (direita) some</strong> → lesão no lobo médio direito</li>
+      <li><strong>Contorno do diafragma some no perfil</strong> → lesão no lobo inferior correspondente</li>
+    </ul>
+    <p class="small">Esse é provavelmente o sinal mais cobrado em prova de anatomia radiológica torácica — pense nele como "a lesão está encostando ou não na estrutura de referência?"</p>
+  </div>
+
+  <h3>Áreas escondidas (hidden areas)</h3>
+  <div class="card warn">
+    <p>Zonas onde lesões passam despercebidas por sobreposição de estruturas — sempre confira especificamente:</p>
+    <ul>
+      <li><strong>Ápices pulmonares</strong> (podem estar atrás da clavícula)</li>
+      <li><strong>Região hilar</strong> (massa pode se confundir com vasos)</li>
+      <li><strong>Região retrocardíaca</strong> (atrás do coração, no perfil aparece como aumento de densidade sobre a coluna dorsal baixa)</li>
+      <li><strong>Região subdiafragmática</strong> (logo abaixo da cúpula, especialmente porção posterior dos lobos inferiores)</li>
+    </ul>
+    <p><strong>Dica prática:</strong> no perfil, os corpos vertebrais devem ficar progressivamente mais radiotransparentes (escuros) de cima para baixo, porque há mais pulmão aerado se sobrepondo embaixo. Se as vértebras inferiores estão mais densas (brancas) que o esperado, suspeite de lesão no lobo inferior sobreposta — chamado de <strong>"spine sign"</strong>.</p>
+  </div>
+
+  <h3>Anatomia e aumento das câmaras cardíacas (visão detalhada)</h3>
+  <div class="card">
+    <table>
+      <tr><th>Câmara</th><th>Posição</th><th>Sinal de aumento na PA</th><th>Sinal de aumento no perfil</th></tr>
+      <tr><td>Átrio esquerdo</td><td>Mais posterior</td><td>Abaulamento do contorno superior direito; alargamento do ângulo da carina</td><td>Abaulamento do contorno póstero-superior</td></tr>
+      <tr><td>Átrio direito</td><td>Direita</td><td>Deslocamento lateral da borda cardíaca direita</td><td>—</td></tr>
+      <tr><td>Ventrículo esquerdo</td><td>Póstero-esquerda</td><td>Aumento do contorno cardíaco para a esquerda</td><td>Abaulamento do contorno ínfero-posterior</td></tr>
+      <tr><td>Ventrículo direito</td><td>Mais anterior (atrás do esterno)</td><td>Empurra o coração para a esquerda; em casos graves forma a borda esquerda</td><td>Preenchimento progressivo do espaço retroesternal, de baixo para cima</td></tr>
+    </table>
+  </div>
+
+  <h3>Linfonodomegalia hilar — "sinal 1-2-3" (sarcoidose)</h3>
+  <div class="card">
+    <p>Quando há aumento simétrico dos hilos D e E <strong>+</strong> alargamento paratraqueal, forma-se o clássico <strong>"1-2-3"</strong> (hilo esquerdo, hilo direito, paratraqueal) — padrão muito sugestivo de sarcoidose. No perfil, massas hilares aparecem como opacidades arredondadas em locais onde normalmente só se vê vaso.</p>
+  </div>
+
+  <h3>Janela aortopulmonar</h3>
+  <div class="card">
+    <p>Espaço entre o arco aórtico e o tronco pulmonar; contorno normal é côncavo ou reto. Preenchimento dessa janela (contorno convexo) sugere massa — geralmente linfonodomegalia (linfoma, carcinoma).</p>
+  </div>
+
+  <h3>Linha azigoesofágica</h3>
+  <div class="card">
+    <p>Uma das linhas mediastinais mais importantes de checar — margeia o recesso azigoesofágico (pulmão direito encostando entre coração anteriormente e coluna posteriormente, delimitado à esquerda pelo esôfago). Deslocamento sugere: hérnia de hiato, patologia esofágica, aumento do átrio esquerdo, linfonodomegalia subcarinal ou cisto broncogênico.</p>
+  </div>
+
+  <h3>4 T's da massa mediastinal anterior</h3>
+  <div class="card">
+    <p>Quando o mediastino superior está alargado na PA e o perfil mostra densidade no espaço retroesternal, pense nos 4 T's: <strong>T</strong>imoma, <strong>T</strong>eratoma (tumor de célula germinativa), <strong>T</strong>ireoide (bócio mergulhante), <strong>T</strong>error (linfoma — "terrible lymphoma").</p>
+  </div>
+
+  <h3>Derrame pericárdico x cardiomegalia verdadeira</h3>
+  <div class="card warn">
+    <p>Sempre que ver uma silhueta cardíaca muito aumentada, pergunte: isso é aumento real de câmara ou derrame pericárdico simulando cardiomegalia? Pistas: contorno globular simétrico sem abaulamento de câmara específica, mudança rápida de tamanho entre exames (derrame se acumula rápido; hipertrofia miocárdica não), e contexto clínico (pós-cirurgia cardíaca recente = suspeitar de sangramento pericárdico).</p>
+  </div>
+
+  <h3>Pneumotórax em paciente deitado (supino) — "deep sulcus sign"</h3>
+  <div class="card">
+    <p>Em RX supino (comum em UTI), o ar do pneumotórax não sobe para o ápice como no paciente em pé — ele se acumula na região anterior/inferior do tórax. Até 30% dos pneumotórax passam despercebidos em RX supino se você só procurar "ar no ápice". O sinal a procurar é o <strong>aprofundamento do seio costofrênico lateral</strong> (fica anormalmente radiotransparente e "alongado" em direção ao hipocôndrio) — e rebaixamento do hemidiafragma correspondente sugere componente hipertensivo.</p>
+  </div>
+
+  <h3>Mimetizadores comuns de pneumotórax</h3>
+  <div class="card">
+    <p><strong>Dobra de pele (skin fold):</strong> cria uma linha que parece a linha pleural visceral, mas — diferente do pneumotórax verdadeiro — a trama pulmonar continua visível além da linha. Comum em pacientes deitados com posicionamento inadequado do chassi.</p>
+  </div>
+
+  <h3>Dedo mindinho hilar ("little finger sign")</h3>
+  <div class="card">
+    <p>A artéria pulmonar do lobo inferior desce verticalmente do hilo, tendo formato e tamanho parecido com um dedo mindinho — visível em ~94% das pessoas à direita e ~62% à esquerda. Em caso de atelectasia do lobo inferior, esse "dedinho" desaparece porque a artéria fica encostada num pulmão colabado (sem ar ao redor para fazer contraste) — outro exemplo de sinal da silhueta aplicado aos vasos hilares.</p>
+  </div>
+</section>
+
+<!-- ===================== 9c. 4 PADRÕES & IC ===================== -->
+<section id="padroes4">
+  <h2>Abordagem dos 4 padrões pulmonares + Insuficiência Cardíaca</h2>
+  <p class="small">Também baseado no Radiology Assistant: <a href="https://radiologyassistant.nl/chest/chest-x-ray/lung-disease" target="_blank" style="color:var(--accent);">Chest X-Ray — Lung Disease</a> e <a href="https://radiologyassistant.nl/chest/chest-x-ray/heart-failure" target="_blank" style="color:var(--accent);">Chest X-Ray — Heart Failure</a>. Busquei imagens de bancos abertos para ilustrar cada achado — veja acima na conversa.</p>
+
+  <div class="card tip">
+    <h3>Toda opacidade pulmonar cai em 1 de 4 padrões</h3>
+    <table>
+      <tr><th>Padrão</th><th>Mecanismo</th><th>Pista-chave no RX</th></tr>
+      <tr><td><strong>Consolidação</strong></td><td>Alvéolos preenchidos por líquido/pus/sangue/células</td><td>Broncograma aéreo, sinal da silhueta presente, <strong>sem</strong> perda de volume</td></tr>
+      <tr><td><strong>Padrão intersticial</strong></td><td>Espessamento do tecido de sustentação do pulmão</td><td>Reticulado fino/grosseiro ou pequenos nódulos difusos</td></tr>
+      <tr><td><strong>Nódulo/massa</strong></td><td>Lesão ocupando espaço, única ou múltipla</td><td>Opacidade arredondada bem definida</td></tr>
+      <tr><td><strong>Atelectasia</strong></td><td>Colapso por perda de ar alveolar</td><td>Opacidade bem definida <strong>sem</strong> broncograma + <strong>perda de volume</strong> (desvio de fissura/hilo/mediastino/diafragma)</td></tr>
+    </table>
+    <p class="small">A principal pergunta que separa consolidação de atelectasia: <strong>houve perda de volume?</strong> Se sim (desvio de estruturas em direção à lesão) → atelectasia. Se não → consolidação.</p>
+  </div>
+
+  <h3>Consolidação — diferencial por padrão de distribuição</h3>
+  <div class="card">
+    <table>
+      <tr><th>Distribuição</th><th>Pensar em</th></tr>
+      <tr><td>Lobar/segmentar (a mais comum)</td><td>Pneumonia lobar — geralmente aguda, febre, tosse</td></tr>
+      <tr><td>Difusa perihilar ("padrão em asa de morcego" / batwing)</td><td>Edema pulmonar (cardiogênico ou não) — poupa a periferia por melhor drenagem linfática ali</td></tr>
+      <tr><td>Difusa periférica ("reverse batwing")</td><td>Doença pulmonar crônica (ex: pneumonia em organização, eosinofílica)</td></tr>
+      <tr><td>Multifocal mal definida</td><td>Broncopneumonia (começa nas vias aéreas, ao contrário da pneumonia lobar que começa nos alvéolos)</td></tr>
+    </table>
+    <p class="small">Pergunta mental útil: o que está preenchendo o alvéolo? Água (transudato) → edema. Pus (exsudato) → infecção. Sangue → hemorragia/contusão. Células → tumor/inflamação crônica.</p>
+  </div>
+
+  <h3>Atelectasia — sinais por lobo (muito cobrado em prova)</h3>
+  <div class="card warn">
+    <table>
+      <tr><th>Lobo colabado</th><th>Sinal característico</th></tr>
+      <tr><td>Lobo superior direito</td><td>Densidade triangular + hilo direito elevado + obliteração do espaço retroesternal claro</td></tr>
+      <tr><td>Lobo médio direito</td><td>Apagamento da borda cardíaca direita (sinal da silhueta) + densidade triangular no perfil</td></tr>
+      <tr><td>Lobo inferior direito</td><td>Artéria interlobar direita não visível (encoberta pelo lobo colabado) + borda cardíaca direita anormal</td></tr>
+      <tr><td>Lobo superior esquerdo</td><td>Faixa de densidade retroesternal + hilo esquerdo anormal + <span class="sign-name">luft sichel sign</span> (foice de ar no ápice, por hiperinsuflação compensatória do lobo inferior)</td></tr>
+      <tr><td>Lobo inferior esquerdo</td><td>Densidade triangular "atrás" do coração + <span class="sign-name">spine sign</span> (vértebras inferiores mais densas que o esperado)</td></tr>
+    </table>
+    <p><strong><span class="sign-name">Golden S sign</span>:</strong> quando uma massa central obstrui o brônquio e causa atelectasia lobar, a fissura colabada faz uma curva em "S" — sugere fortemente massa obstrutiva subjacente (não apenas tampão de muco).</p>
+  </div>
+
+  <h3>Nódulo pulmonar solitário</h3>
+  <div class="card">
+    <p>Definição: opacidade arredondada, bem definida, ≤ 3 cm, totalmente circundada por parênquima pulmonar (não toca hilo/mediastino, sem adenopatia/atelectasia/derrame associados). Acima de 3 cm já se trata como massa (maior probabilidade de malignidade) até prova em contrário.</p>
+    <p class="small">Sempre compare com exame antigo: estabilidade por 2 anos sugere lesão benigna (exceto nódulos em vidro fosco puro, que podem crescer mais lentamente).</p>
+  </div>
+
+  <h3>Lucências (áreas de densidade diminuída)</h3>
+  <div class="card">
+    <table>
+      <tr><th>Termo</th><th>Definição prática</th></tr>
+      <tr><td>Cavidade</td><td>Lucência com parede espessa — geralmente dentro de massa/consolidação necrosada</td></tr>
+      <tr><td>Cisto</td><td>Lucência com parede fina</td></tr>
+      <tr><td>Enfisema</td><td>Lucência sem parede visível</td></tr>
+      <tr><td>Pneumatocele</td><td>Cisto pulmonar transitório, geralmente pós-pneumonia, trauma ou aspiração — mecanismo de necrose + obstrução em válvula</td></tr>
+    </table>
+    <p class="small">Cavitação em pneumonia = infecção grave (abscesso); cavitação com paciente pouco sintomático favorece TB. Carcinoma epidermoide é o tipo de câncer de pulmão que mais cavita (~10% dos casos); carcinoma de pequenas células praticamente não cavita.</p>
+  </div>
+
+  <h3>Insuficiência cardíaca congestiva — os 3 estágios radiológicos</h3>
+  <div class="card tip">
+    <table>
+      <tr><th>Estágio</th><th>Achado</th><th>Mecanismo</th></tr>
+      <tr><td><strong>I — Redistribuição</strong></td><td>Vasos do ápice tão ou mais calibrosos que os da base (inversão do padrão normal); relação artéria/brônquio aumentada nos lobos superiores</td><td>Recrutamento vascular por aumento da pressão venosa pulmonar</td></tr>
+      <tr><td><strong>II — Edema intersticial</strong></td><td><span class="sign-name">Linhas de Kerley B</span> (linhas horizontais curtas de 1-2 cm perto da pleura lateral); espessamento peribrônquico; "borramento" hilar (perihilar haze)</td><td>Extravasamento de líquido para o interstício</td></tr>
+      <tr><td><strong>III — Edema alveolar</strong></td><td>Consolidação perihilar bilateral com broncograma aéreo (padrão "asa de morcego"); derrame pleural</td><td>Extravasamento para dentro dos alvéolos, drenagem linfática já saturada</td></tr>
+    </table>
+  </div>
+
+  <h3>Outras ferramentas para IC no RX</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Índice cardiotorácico &gt; 0,5</strong> em PA — sensibilidade ~50%, especificidade 75-80% para IC (não é definitivo sozinho)</li>
+      <li><strong>Pedículo vascular</strong> (entre veia cava superior e origem da artéria subclávia esquerda): normal &lt; 60 mm; &gt; 85 mm é patológico em 80% dos casos — cada 5 mm a mais equivale a ~1 litro de aumento de volume intravascular. É mais útil comparando exames seriados do mesmo paciente do que como valor isolado.</li>
+      <li><strong>Veia ázigos dilatada</strong> (&gt; 10 mm em pé, &gt; 15 mm deitado) — sugere aumento da pressão do átrio direito, geralmente acompanha pedículo vascular alargado</li>
+      <li><strong>Derrame pleural</strong>: bilateral em 70% dos casos de IC; precisa de pelo menos ~175 mL para aparecer como menisco no seio costofrênico na PA</li>
+    </ul>
+    <p class="small">Dica de prova: <strong>derrame pericárdico</strong> pode aumentar o índice cardiotorácico simulando cardiomegalia — sempre considere isso em pós-operatório de cirurgia cardíaca com aumento súbito da silhueta.</p>
+  </div>
+</section>
+
+<!-- ===================== 10. MODELO DE RESPOSTA ===================== -->
+<section id="laudo">
+  <h2>Modelo de resposta para discussão de casos</h2>
+  <p class="small">Estrutura baseada no formulário "Avaliação das estruturas anatômicas cardíacas em TC e radiografia" do seu material — use este roteiro de perguntas para organizar sua resposta em qualquer caso de prova.</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Pergunta</th><th>O que responder</th></tr>
+      <tr><td>Qual a incidência/corte?</td><td>RX: PA / AP / Perfil — TC: Axial / Coronal / Sagital</td></tr>
+      <tr><td>Qual a janela (se TC)?</td><td>Mediastino / Pulmão / Óssea</td></tr>
+      <tr><td>Usou contraste endovenoso?</td><td>Sim/Não — se sim, justifique (ex: avaliar vasos, diferenciar trombo)</td></tr>
+      <tr><td>Há assimetria significativa entre D e E?</td><td>Sim/Não — onde?</td></tr>
+      <tr><td>Qual(is) estrutura(s) está(ão) alterada(s)?</td><td>Descreva localização, tamanho, forma, margens antes de nomear</td></tr>
+      <tr><td>Qual a principal alteração de densidade?</td><td>Radiopaco/hiperdenso ou radiotransparente/hipodenso</td></tr>
+      <tr><td>O exame sugere qual condição?</td><td>Hipótese diagnóstica, com diferenciais se cabível</td></tr>
+      <tr><td>Qual alteração você esperaria no exame físico?</td><td>Correlação clínica (ex: ictus desviado, turgência jugular, sopro)</td></tr>
+    </table>
+  </div>
+
+  <div class="card tip">
+    <h3>Dica de estilo de resposta (evite a descrição "leiga")</h3>
+    <p>Nos casos do seu material, as opções de resposta sempre incluem uma versão em linguagem leiga/informal (errada para prova) e uma versão técnica precisa. Use sempre terminologia radiológica correta: "opacidade" em vez de "mancha branca", "hipertransparência" em vez de "área mais escura", "broncograma aéreo" em vez de "canais de ar visíveis". Cite lateralidade, lobo e padrão sempre que possível.</p>
+  </div>
+
+  <div class="card">
+    <h3>Roteiro de 8 itens como modelo de laudo (recapitulando)</h3>
+    <p>1. Partes moles → 2. Arcabouço ósseo → 3. Mediastino/traqueia → 4. Hilos/trama vascular → 5. Parênquima pulmonar → 6. Cúpulas/seios costofrênicos → 7. Coração (+ índice cardiotorácico) → 8. Aorta. Descreva "sem alterações" ou "íntegro" quando normal, e detalhe achados quando alterado.</p>
+  </div>
+</section>
+
+<!-- ===================== 8. PLANO 7 DIAS ===================== -->
+<section id="plano">
+  <h2>Cronograma de estudo</h2>
+  <p class="small">Foco: dominar o roteiro oficial + reconhecer os casos e sinais do seu material antes da prova.</p>
+
+  <div class="day">
+    <h4>Dia 1 — Roteiro oficial e parâmetros técnicos</h4>
+    <span class="tag">Roteiro</span><span class="tag">Checklists</span>
+    <p>Decore os 3 parâmetros técnicos (dose, inspiração, alinhamento) e o roteiro de 8 itens. Pratique nomeando cada item numa imagem qualquer, mesmo normal.</p>
+  </div>
+  <div class="day">
+    <h4>Dia 2 — Anatomia normal do tórax</h4>
+    <span class="tag orange">Anatomia</span>
+    <p>Revise partes moles, arcabouço ósseo, seios costofrênicos, hilos e silhueta cardiomediastinal. Desenhe de memória os contornos cardíacos (D: cava+átrio D; E: botão aórtico, tronco pulmonar, VE).</p>
+  </div>
+  <div class="day">
+    <h4>Dia 3 — Casos de tórax (Grupo 1 ao 5)</h4>
+    <span class="tag">Padrões</span>
+    <p>Refaça os casos: pneumatocele x abscesso, derrame pleural, pneumotórax, DPOC/enfisema, pneumonia (broncograma) e vidro fosco x consolidação. Escreva a descrição técnica de cada achado sem olhar a resposta.</p>
+  </div>
+  <div class="day">
+    <h4>Dia 4 — Casos cardiovasculares e sinais</h4>
+    <span class="tag red">Cardiovascular</span>
+    <p>Estude os 4 sinais (Shmoo, Oreo, garrafa d'água, Palla) e sua correlação com o exame físico. Use os flashcards da aba 10 para fixar.</p>
+  </div>
+  <div class="day">
+    <h4>Dia 5 — Revisão ativa + quiz completo</h4>
+    <span class="tag">Revisão</span>
+    <p>Faça o quiz sem consultar o guia. Volte só nos tópicos que errou.</p>
+  </div>
+  <div class="day">
+    <h4>Dia 6 — Simulado com o modelo de resposta</h4>
+    <span class="tag">Aplicação</span>
+    <p>Pegue 2-3 casos do seu material (ou peça mais imagens da pasta) e responda usando o roteiro de 8 perguntas da aba "Modelo de Resposta", cronometrando o tempo.</p>
+  </div>
+  <div class="day">
+    <h4>Dia 7 — Revisão final</h4>
+    <span class="tag">Consolidação</span>
+    <p>Releia só o glossário de sinais e as tabelas de diferenciação (pneumatocele x abscesso; vidro fosco x consolidação). Durma bem.</p>
+  </div>
+</section>
+
+<!-- ===================== 9. QUIZ ===================== -->
+<section id="quiz">
+  <h2>Quiz de fixação</h2>
+  <div class="score-box" id="quiz-score">Acertos: 0 / 0</div>
+  <div id="quiz-container"></div>
+</section>
+
+<!-- ===================== 12b. AVALIACAO COM IMAGENS ===================== -->
+<section id="avalimg">
+  <h2>Avaliação com imagens — diagnóstico por imagem</h2>
+  <p class="small">Questões de múltipla escolha construídas a partir das <b>imagens reais</b> do quiz "Radiology Quiz — Desafio Torácico" (material de curso). Observe a imagem, escolha a alternativa e clique: o gabarito é revelado com a explicação anatômica/fisiopatológica. As imagens foram recortadas dos slides originais, preservando anotações (setas/números) quando existiam.</p>
+
+  <div class="card tip">
+    <h3>Como usar</h3>
+    <p>Tente <b>descrever a imagem com o roteiro de 8 itens (aba 1)</b> antes de olhar as alternativas. Só depois escolha — assim você treina a leitura sistemática, não o reconhecimento de padrão "chutado". A pontuação aparece no topo.</p>
+  </div>
+
+  <div class="score-box" id="avalimg-score">Acertos: 0 / 0</div>
+  <div id="avalimg-container"></div>
+</section>
+
+<!-- ===================== 10. FLASHCARDS ===================== -->
+<section id="flash">
+  <h2>Flashcards — clique para virar</h2>
+  <div id="flash-container"></div>
+</section>
+
+<!-- ===================== 14. AUTOAVALIACAO ===================== -->
+<section id="autoaval">
+  <h2>Autoavaliação — casos para responder e depois corrigir</h2>
+  <p class="small">Não consegui baixar as imagens específicas do radiologia.online (a galeria deles carrega via JavaScript e não fica acessível para minhas ferramentas, além de ser conteúdo proprietário do site). Em vez disso, montei casos novos — no mesmo formato do formulário do seu material de curso — para você treinar "às cegas": leia o caso, escreva sua resposta na caixa, e só depois clique para revelar o gabarito.</p>
+
+  <div class="card tip">
+    <h3>Como usar</h3>
+    <p>Responda por escrito (mentalmente ou na caixa de texto) antes de revelar. O objetivo é simular a prova: você não vai ter o gabarito do lado enquanto pensa.</p>
+  </div>
+
+  <div id="autoaval-container"></div>
+</section>
+
+</main>
+
+<footer>Guia gerado a partir do material de curso (HC3 — Procedimentos) e de Wada DT, Rodrigues JAH, Santos MK. Medicina (Ribeirão Preto), 2019.</footer>
+
+<script>
+const autoavalData = [
+  {
+    titulo: "Caso 11 — Atelectasia com massa obstrutiva",
+    vinheta: "Paciente tabagista, 65 anos. RX de tórax mostra colapso do lobo superior direito: densidade triangular, hilo direito elevado, obliteração do espaço retroesternal. No perfil, a fissura colabada faz uma curva convexa característica.",
+    perguntas: [
+      "Esse padrão de fissura colabada com curvatura tem um nome — qual?",
+      "O que esse sinal sugere sobre a causa da atelectasia?",
+      "Cite 2 diagnósticos diferenciais para atelectasia lobar num tabagista de 65 anos."
+    ],
+    gabarito: "Sinal: 'Golden S sign'. Ele sugere que a atelectasia é causada por uma massa central obstruindo o brônquio (não apenas por um tampão de muco simples) — a massa empurra a fissura, criando a curvatura em S. Diferenciais num tabagista: carcinoma broncogênico (mais provável, dado o perfil de risco) e tampão de muco (menos provável nesse contexto, mais comum em ventilação mecânica ou asma/ABPA)."
+  },
+  {
+    titulo: "Caso 12 — Distinguir consolidação de atelectasia",
+    vinheta: "Dois pacientes com opacidade no lobo inferior esquerdo no RX. Paciente A: a opacidade tem broncograma aéreo visível, e as estruturas vizinhas (hilo, mediastino, diafragma) estão em posição normal. Paciente B: a opacidade não tem broncograma, e há desvio do mediastino para o mesmo lado da opacidade, com elevação do hemidiafragma esquerdo.",
+    perguntas: [
+      "Qual paciente tem consolidação e qual tem atelectasia? Justifique.",
+      "Por que o desvio do mediastino aponta para atelectasia e não para consolidação?",
+      "Cite uma causa comum de atelectasia total de um lobo em paciente sob ventilação mecânica."
+    ],
+    gabarito: "Paciente A = consolidação (broncograma aéreo presente, sem perda de volume/desvio de estruturas). Paciente B = atelectasia (sem broncograma, com perda de volume evidenciada pelo desvio de estruturas em direção à lesão). O mediastino e o diafragma se deslocam 'para dentro' do espaço deixado pelo pulmão colabado — isso só acontece quando há perda real de volume pulmonar, o que não ocorre na consolidação (os alvéolos continuam com o mesmo volume, só preenchidos por líquido/pus em vez de ar). Causa comum em ventilação mecânica: tubo endotraqueal mal posicionado (intubação seletiva de um brônquio) ou tampão de muco."
+  },
+  {
+    titulo: "Caso 13 — Insuficiência cardíaca, estadiamento radiológico",
+    vinheta: "Paciente com dispneia progressiva. RX de tórax mostra: vasos do ápice pulmonar tão calibrosos quanto os da base, linhas horizontais curtas próximas à pleura lateral em ambas as bases, e discreto borramento dos contornos hilares. Índice cardiotorácico de 0,54.",
+    perguntas: [
+      "Em qual estágio radiológico de insuficiência cardíaca esse paciente se encontra?",
+      "Como se chamam as linhas horizontais descritas na base pulmonar?",
+      "O que diferenciaria esse quadro do estágio mais avançado?"
+    ],
+    gabarito: "Estágio II — edema intersticial (já com redistribuição de estágio I associada, já que os vasos apicais estão tão calibrosos quanto os basais). As linhas são as linhas de Kerley B (linfáticos septais espessados por edema intersticial). O estágio III (edema alveolar) mostraria consolidação perihilar bilateral com broncograma aéreo — preenchimento dos alvéolos, não só do interstício."
+  },
+  {
+    titulo: "Caso 6 — Sinal da silhueta (RX PA)",
+    vinheta: "Paciente com tosse e febre. No RX de tórax PA, a borda do ventrículo esquerdo (contorno cardíaco esquerdo inferior) está obscurecida/não é mais visível com nitidez. O restante do coração tem contornos normais.",
+    perguntas: [
+      "O que significa o desaparecimento de uma borda cardíaca (sinal da silhueta)?",
+      "Qual lobo/segmento pulmonar você suspeitaria estar acometido, sabendo que a borda do VE some?",
+      "Se em vez disso a borda do átrio direito tivesse desaparecido, qual seria a localização suspeita?"
+    ],
+    gabarito: "O sinal da silhueta positivo indica que a lesão está encostando diretamente na estrutura cujo contorno desapareceu (mesma densidade radiográfica, perda da interface). Borda do VE desaparecida → língula (porção anterior do lobo superior esquerdo, que normalmente encosta no VE). Se fosse a borda do átrio direito → lobo médio direito."
+  },
+  {
+    titulo: "Caso 7 — Área escondida (retrocardíaca)",
+    vinheta: "RX de tórax PA aparentemente normal à primeira vista. No perfil, você nota um discreto aumento de densidade sobrepondo as vértebras torácicas baixas.",
+    perguntas: [
+      "Esse achado no perfil (vértebras mais densas que o esperado nas porções baixas) tem nome — qual?",
+      "O que ele sugere em termos de localização da lesão?",
+      "Por que esse tipo de lesão costuma passar despercebido só com a PA?"
+    ],
+    gabarito: "Achado: 'spine sign' (sinal da coluna) — no perfil normal, as vértebras ficam progressivamente mais radiotransparentes de cima para baixo por causa do pulmão aerado sobreposto; se as vértebras baixas estão mais densas que o esperado, sugere consolidação/massa no lobo inferior sobreposta a elas. Na PA, a lesão retrocardíaca fica 'escondida' atrás da silhueta cardíaca, por isso é uma das 'áreas escondidas' clássicas — sempre corrija com o perfil."
+  },
+  {
+    titulo: "Caso 8 — Linfonodomegalia hilar bilateral",
+    vinheta: "RX de tórax mostra aumento simétrico dos hilos pulmonares D e E, além de um alargamento visível à direita da traqueia (região paratraqueal).",
+    perguntas: [
+      "Esse padrão de 3 achados associados tem um nome mnemônico — qual?",
+      "Qual a hipótese diagnóstica mais associada a esse padrão?",
+      "Cite uma forma de diferenciar, na prática, se o aumento hilar é vascular ou linfonodal."
+    ],
+    gabarito: "Padrão: 'sinal 1-2-3' (hilo esquerdo aumentado + hilo direito aumentado + alargamento paratraqueal). Hipótese mais associada: sarcoidose. Para diferenciar vascular de linfonodal: no perfil, vasos pulmonares normais têm formato/trajeto característico (ex. artérias descendo verticalmente do hilo); linfonodos aumentados aparecem como opacidades arredondadas em locais onde normalmente não se espera ver vaso."
+  },
+  {
+    titulo: "Caso 9 — Pneumotórax em paciente supino (UTI)",
+    vinheta: "Paciente em ventilação mecânica, piora respiratória aguda. RX de tórax (feito deitado, incidência AP supina) mostra um seio costofrênico esquerdo anormalmente radiotransparente e alongado em direção ao abdome, além de rebaixamento do hemidiafragma esquerdo.",
+    perguntas: [
+      "Por que o pneumotórax pode não aparecer no ápice em pacientes deitados?",
+      "Como se chama o sinal descrito na vinheta?",
+      "O rebaixamento do hemidiafragma associado sugere qual gravidade/mecanismo?"
+    ],
+    gabarito: "Em decúbito dorsal, o ar do pneumotórax migra para a região anterior/inferior do tórax (não sobe ao ápice como no paciente em pé), por isso até 30% passam despercebidos em RX supino se só procurarmos ar apical. O sinal descrito é o 'deep sulcus sign' (aprofundamento do seio costofrênico lateral). O rebaixamento do diafragma associado sugere pneumotórax hipertensivo (tensão), uma emergência."
+  },
+  {
+    titulo: "Caso 10 — Massa no mediastino anterior",
+    vinheta: "RX de tórax PA mostra alargamento do mediastino superior. No perfil, há uma densidade de partes moles ocupando o espaço retroesternal (que normalmente deveria ser radiotransparente, só com ar).",
+    perguntas: [
+      "Esse achado no perfil localiza a massa em qual compartimento mediastinal?",
+      "Cite o mnemônico dos principais diagnósticos diferenciais para massa nesse compartimento.",
+      "Por que o perfil é essencial nesse caso, mesmo já tendo a PA alterada?"
+    ],
+    gabarito: "Densidade preenchendo o espaço retroesternal (que deveria ser radiotransparente) localiza a massa no mediastino anterior. Mnemônico: os '4 T's' — Timoma, Teratoma (tumor de célula germinativa), Tireoide (bócio mergulhante), Terror (linfoma). O perfil é essencial porque a PA sozinha só mostra 'alargamento do mediastino', sem dizer se é anterior, médio ou posterior — informação que muda completamente a lista de diagnósticos diferenciais."
+  },
+  {
+    titulo: "Caso 1 — Radiografia de tórax",
+    vinheta: "Paciente adulto, tosse produtiva e febre há 5 dias. RX de tórax PA mostra opacidade homogênea numa base pulmonar, com broncograma aéreo visível dentro da opacidade, e os vasos/brônquios ao redor ficam obscurecidos pela densidade.",
+    perguntas: [
+      "Qual a incidência do exame?",
+      "Qual a principal alteração de densidade (radiopaco/hiperdenso ou radiotransparente/hipodenso)?",
+      "Esse padrão é consolidação ou vidro fosco? Justifique pela visibilidade dos vasos.",
+      "Qual a hipótese diagnóstica mais provável?"
+    ],
+    gabarito: "Incidência: PA. Densidade: radiopaco/hiperdenso (opacidade). Padrão: consolidação — porque a densidade obscurece os vasos e brônquios ao redor (diferente do vidro fosco, onde eles continuam visíveis), e há broncograma aéreo nítido, típico de consolidação. Hipótese: pneumonia bacteriana (padrão clássico de consolidação lobar/segmentar com broncograma aéreo)."
+  },
+  {
+    titulo: "Caso 2 — TC de tórax",
+    vinheta: "Homem, 60 anos, dispneia súbita após cirurgia ortopédica há 3 dias, taquicardia e dor pleurítica. TC de tórax com contraste IV mostra uma área hipodensa dentro do lúmen de um ramo da artéria pulmonar, que não se preenche pelo contraste, circundada por contraste (hiperdenso) na periferia do vaso.",
+    perguntas: [
+      "Usou contraste endovenoso? Justifique por quê.",
+      "Qual a alteração encontrada e onde?",
+      "Qual o diagnóstico mais provável?",
+      "Qual sinal você esperaria encontrar no RX simples desse paciente e qual achado no exame físico?"
+    ],
+    gabarito: "Contraste: sim — necessário para opacificar o lúmen vascular e evidenciar a falha de enchimento. Alteração: falha de enchimento (trombo hipodenso) dentro de ramo da artéria pulmonar. Diagnóstico: tromboembolismo pulmonar (TEP) agudo. No RX simples: pode haver sinal de Palla (artéria pulmonar descendente direita proeminente) ou o RX pode até ser normal. Exame físico: taquicardia, hipoxemia, possível hiperfonia de B2 — fatores de risco: imobilização recente (pós-cirúrgico)."
+  },
+  {
+    titulo: "Caso 3 — Radiografia de tórax",
+    vinheta: "Paciente com dispneia progressiva e ortopneia. RX de tórax PA mostra silhueta cardíaca aumentada, com contorno globular e simétrico, sem elevação isolada de nenhuma câmara específica. Índice cardiotorácico = 0,62.",
+    perguntas: [
+      "O índice cardiotorácico está normal ou alterado? Qual o valor de referência?",
+      "O formato globular e simétrico do coração sugere qual mecanismo, mais do que aumento isolado de uma câmara?",
+      "Qual o diagnóstico mais provável e qual sinal radiológico está associado a ele?",
+      "Qual achado você esperaria na ausculta cardíaca?"
+    ],
+    gabarito: "Índice cardiotorácico alterado (normal < 0,5; aqui está 0,62). O formato globular e simétrico (sem contorno de câmara específica proeminente) é típico de derrame pericárdico, não de cardiomegalia por sobrecarga de uma câmara isolada. Sinal associado: sinal da garrafa d'água. Ausculta: bulhas hipofonéticas/abafadas (o líquido pericárdico amortece a transmissão do som)."
+  },
+  {
+    titulo: "Caso 4 — TC de tórax, janela pulmonar",
+    vinheta: "Paciente jovem, trauma torácico. TC mostra, num corte axial, uma via aérea de menor calibre acompanhada por uma estrutura vascular adjacente de maior calibre que ela — ou seja, a relação brônquio-artéria está preservada (artéria mais larga que o brônquio) num determinado segmento, mas em outro segmento do mesmo pulmão essa relação está invertida, com o brônquio mais largo que a artéria.",
+    perguntas: [
+      "Qual é a relação normal esperada entre brônquio e artéria pulmonar acompanhante?",
+      "Como se chama o achado quando essa relação se inverte?",
+      "Esse achado invertido é sugestivo de qual condição?"
+    ],
+    gabarito: "Relação normal: a artéria pulmonar é mais larga que o brônquio que ela acompanha. Quando essa relação se inverte (brônquio mais largo que a artéria), o achado se chama sinal do anel de sinete. É sugestivo de bronquiectasia (dilatação brônquica patológica)."
+  },
+  {
+    titulo: "Caso 5 — Radiografia de tórax (síntese)",
+    vinheta: "Use o roteiro de 8 itens (aba 1) para praticar: pegue qualquer imagem de RX de tórax do seu material (ou da aba Recursos Externos) e descreva cada um dos 8 itens em voz alta ou por escrito, sem pular nenhum, mesmo que esteja tudo normal.",
+    perguntas: [
+      "Liste os 8 itens do roteiro na ordem correta.",
+      "Para cada item, qual pergunta-chave você faz?"
+    ],
+    gabarito: "1. Partes moles (pele, mamas, subcutâneo) 2. Arcabouço ósseo (coluna, costelas, clavículas, escápulas) 3. Mediastino e traqueia (centrados?) 4. Hilos e trama vascular (aspecto habitual?) 5. Parênquima pulmonar (opacidades focais/difusas?) 6. Cúpulas diafragmáticas e seios costofrênicos (livres?) 7. Coração (morfologia + índice cardiotorácico) 8. Aorta (botão aórtico, ectasia). Dispositivos médicos (tubos/drenos/cateteres) são descritos antes de tudo, no início do laudo."
+  }
+];
+
+const autoavalContainer = document.getElementById('autoaval-container');
+autoavalData.forEach((c, idx) => {
+  const card = document.createElement('div');
+  card.className = 'quiz-card';
+  let perguntasHtml = c.perguntas.map(p => `<li>${p}</li>`).join('');
+  card.innerHTML = `
+    <div class="case-header">${c.titulo}</div>
+    <div class="case-clin">${c.vinheta}</div>
+    <ul>${perguntasHtml}</ul>
+    <textarea placeholder="Escreva sua resposta aqui (opcional)..." style="width:100%;min-height:80px;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-family:inherit;font-size:.85rem;margin-top:8px;"></textarea>
+    <br><button class="reveal-btn" style="margin-top:8px;background:var(--accent);color:#08201d;font-weight:700;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.85rem;">Revelar gabarito</button>
+    <div class="quiz-explain gabarito-text" style="display:none;margin-top:10px;">${c.gabarito}</div>
+  `;
+  const btn = card.querySelector('.reveal-btn');
+  const gabarito = card.querySelector('.gabarito-text');
+  btn.addEventListener('click', () => {
+    const showing = gabarito.style.display === 'block';
+    gabarito.style.display = showing ? 'none' : 'block';
+    btn.textContent = showing ? 'Revelar gabarito' : 'Ocultar gabarito';
+  });
+  autoavalContainer.appendChild(card);
+});
+</script>
+
+<script>
+const sidebar = document.getElementById('tabnav');
+const backdrop = document.getElementById('sidebar-backdrop');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+
+function openSidebar(){
+  sidebar.classList.add('open');
+  backdrop.classList.add('show');
+}
+function closeSidebar(){
+  sidebar.classList.remove('open');
+  backdrop.classList.remove('show');
+}
+sidebarToggle.addEventListener('click', ()=>{
+  if(sidebar.classList.contains('open')) closeSidebar();
+  else openSidebar();
+});
+backdrop.addEventListener('click', closeSidebar);
+
+const buttons = document.querySelectorAll('nav button');
+const sections = document.querySelectorAll('main section');
+buttons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    sections.forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    closeSidebar();
+  });
+});
+
+const checkboxes = document.querySelectorAll('#roteiro-checklist input');
+const progressBar = document.getElementById('roteiro-progress');
+const progressText = document.getElementById('roteiro-progress-text');
+function updateProgress(){
+  const total = checkboxes.length;
+  const done = Array.from(checkboxes).filter(c=>c.checked).length;
+  progressBar.style.width = (done/total*100)+'%';
+  progressText.textContent = done+'/'+total+' concluído';
+}
+checkboxes.forEach(c=>c.addEventListener('change', updateProgress));
+
+const quizData = [
+  {q:"Numa radiografia de tórax em PA adequadamente penetrada, até onde devemos conseguir identificar a coluna vertebral?", opts:["Coluna inteira, incluindo lombar","Apenas o terço superior da coluna torácica (T1-T3)","Não devemos ver a coluna de jeito nenhum","Apenas a coluna cervical"], correct:1, explain:"Com dose adequada, só o terço superior da coluna dorsal (T1-T3) fica visível; ver a coluna inteira indica exame muito penetrado."},
+  {q:"Quantos arcos costais posteriores devem ser visíveis numa radiografia com inspiração correta?", opts:["3 a 5","6 a 8","9 a 11","12 a 14"], correct:2, explain:"A inspiração correta permite identificar de 9 a 11 arcos costais posteriores projetados sobre os campos pulmonares."},
+  {q:"Um paciente com massa cística de parede fina, lisa e regular no lobo superior, com nível hidroaéreo, após infecção pulmonar recente. Isso é mais compatível com:", opts:["Abscesso pulmonar","Pneumatocele","Tumor cavitado","Derrame pleural loculado"], correct:1, explain:"Pneumatocele tem parede fina, lisa e regular — diferente do abscesso, que tem parede espessa e irregular com necrose central."},
+  {q:"Na TC de tórax, opacidade em que os vasos e brônquios ainda são visíveis através dela é chamada de:", opts:["Consolidação","Vidro fosco","Nódulo sólido","Massa"], correct:1, explain:"No vidro fosco os vasos permanecem visíveis (preservados); na consolidação eles ficam obscurecidos pela densidade."},
+  {q:"O apagamento do ângulo costofrênico com uma linha côncava voltada para cima é chamado de:", opts:["Sinal de Palla","Sinal do menisco","Sinal de Shmoo","Sinal do anel de sinete"], correct:1, explain:"O sinal do menisco é o clássico apagamento do seio costofrênico por derrame pleural livre."},
+  {q:"O sinal da 'garrafa d'água' no RX de tórax é característico de:", opts:["Pneumotórax hipertensivo","Derrame pericárdico volumoso","Aneurisma de aorta","TEP maciço"], correct:1, explain:"A silhueta cardíaca globular e aumentada, lembrando uma garrafa/cantil antigo, indica derrame pericárdico (geralmente > 200 mL)."},
+  {q:"Na TC de tórax, o sinal do 'biscoito Oreo' descreve:", opts:["Calcificação da parede aórtica","Líquido pericárdico entre as camadas de gordura para e epicárdica","Nódulo pulmonar calcificado","Derrame pleural loculado"], correct:1, explain:"O líquido pericárdico fica delimitado pela gordura paracárdica e epicárdica, formando uma aparência de 3 camadas — o sinal do biscoito Oreo."},
+  {q:"Um paciente com dispneia após voo longo, dor na panturrilha e artéria pulmonar descendente direita proeminente no RX. Esse achado é conhecido como:", opts:["Sinal de Palla — sugestivo de TEP","Sinal de Shmoo — sugestivo de cardiomegalia","Sinal do menisco — sugestivo de derrame pleural","Sinal do diafragma contínuo — sugestivo de pneumomediastino"], correct:0, explain:"O sinal de Palla (artéria pulmonar descendente D proeminente) é sugestivo de tromboembolismo pulmonar, contexto clássico de imobilização (voo longo) + dor em panturrilha (TVP)."},
+  {q:"Qual é o valor normal do índice cardiotorácico medido em radiografia PA?", opts:["< 0,3","< 0,5","< 0,7","< 0,9"], correct:1, explain:"O índice cardiotorácico normal é menor que 0,5 (50%) quando medido em PA, com paciente em pé e inspirado."},
+  {q:"Por que não se deve medir o índice cardiotorácico em incidência AP?", opts:["Porque a AP não mostra o coração","Porque na AP o coração fica mais afastado do detector e sua imagem é magnificada","Porque a AP só é usada em crianças","Porque o índice cardiotorácico não existe em AP"], correct:1, explain:"Na AP o coração está mais longe do detector, o que amplia sua imagem e pode simular cardiomegalia."}
+];
+
+let score = 0, answered = 0;
+const quizContainer = document.getElementById('quiz-container');
+const scoreBox = document.getElementById('quiz-score');
+quizData.forEach((item, idx)=>{
+  const card = document.createElement('div');
+  card.className = 'quiz-card';
+  const qEl = document.createElement('div');
+  qEl.innerHTML = '<strong>'+(idx+1)+'. '+item.q+'</strong>';
+  card.appendChild(qEl);
+  const optsWrap = document.createElement('div');
+  optsWrap.className = 'quiz-opts';
+  const explainEl = document.createElement('div');
+  explainEl.className = 'quiz-explain';
+  explainEl.textContent = item.explain;
+  item.opts.forEach((optText, optIdx)=>{
+    const b = document.createElement('button');
+    b.textContent = optText;
+    b.addEventListener('click', ()=>{
+      if(b.dataset.locked) return;
+      Array.from(optsWrap.children).forEach(c=>c.dataset.locked='1');
+      if(optIdx === item.correct){ b.classList.add('correct'); score++; }
+      else { b.classList.add('wrong'); optsWrap.children[item.correct].classList.add('correct'); }
+      answered++;
+      explainEl.style.display='block';
+      scoreBox.textContent = 'Acertos: '+score+' / '+answered;
+    });
+    optsWrap.appendChild(b);
+  });
+  card.appendChild(optsWrap);
+  card.appendChild(explainEl);
+  quizContainer.appendChild(card);
+});
+
+const flashData = [
+  {front:"Sinal do menisco", back:"Linha côncava voltada para cima no seio costofrênico apagado — derrame pleural livre."},
+  {front:"Sinal de Shmoo", back:"VE aumentado + aorta dilatada na PA, formato lembra o personagem Shmoo — cardiomegalia por sobrecarga esquerda."},
+  {front:"Sinal da garrafa d'água", back:"Silhueta cardíaca globular aumentada — derrame pericárdico volumoso (geralmente > 200 mL)."},
+  {front:"Sinal do biscoito Oreo", back:"Líquido pericárdico entre gordura para e epicárdica em 3 camadas na TC — derrame pericárdico."},
+  {front:"Sinal de Palla", back:"Artéria pulmonar descendente direita proeminente no RX — sugestivo de TEP."},
+  {front:"Sinal do diafragma contínuo", back:"Ar no pneumomediastino permite ver o diafragma como linha contínua de um lado a outro."},
+  {front:"Sinal do anel de sinete", back:"Brônquio mais largo que a artéria que acompanha — sugestivo de bronquiectasia (relação normal é invertida)."},
+  {front:"Broncograma aéreo", back:"Ar dentro dos brônquios contrastando com parênquima consolidado ao redor — sinal de consolidação (ex: pneumonia)."},
+  {front:"Pneumatocele", back:"Espaço cístico de parede fina, lisa e regular, com gás; pode ter nível hidroaéreo. Difere do abscesso pela parede fina."},
+  {front:"Abscesso pulmonar", back:"Coleção de gás/fluido com parede espessa e irregular; centro necrótico (hipodenso) com halo hiperdenso após contraste."},
+  {front:"Vidro fosco", back:"Opacidade sutil que preserva a visibilidade de vasos/brônquios através dela — preenchimento alveolar parcial + espessamento septal."},
+  {front:"Consolidação", back:"Opacidade densa que obscurece vasos/brônquios — preenchimento completo do espaço aéreo."},
+  {front:"Índice cardiotorácico", back:"Maior diâmetro cardíaco ÷ maior diâmetro torácico interno, medido em PA. Normal < 0,5."},
+  {front:"Roteiro de 8 itens (Wada et al.)", back:"1.Partes moles 2.Arcabouço ósseo 3.Mediastino/traqueia 4.Hilos/trama vascular 5.Parênquima 6.Cúpulas/seios costofrênicos 7.Coração 8.Aorta."},
+  {front:"3 parâmetros técnicos do RX de tórax", back:"Dose/penetração (T1-T3 visível), inspiração (9-11 arcos costais posteriores), alinhamento (clavículas equidistantes, escápulas fora dos pulmões)."}
+];
+const flashContainer = document.getElementById('flash-container');
+flashData.forEach(item=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'flash';
+  wrap.innerHTML = `<div class="flash-inner"><div class="flash-face flash-front">${item.front}</div><div class="flash-face flash-back">${item.back}</div></div>`;
+  wrap.addEventListener('click', ()=> wrap.classList.toggle('flip'));
+  flashContainer.appendChild(wrap);
+});
+</script>
+
+<script>
+const avalImgData = [{"img": "img/hc3/hc3-085.jpg", "cap": "RX de tórax AP — criança. Opacidades bilaterais + imagem arredondada, radiolucente, de paredes finas na base esquerda.", "q": "A radiografia mostra opacidades pulmonares bilaterais e uma imagem arredondada, radiolucente, de paredes finas e regulares na base do pulmão esquerdo. Qual alternativa melhor descreve esse achado?", "opts": ["Cavidade de paredes espessas e irregulares contendo nível hidroaéreo.", "Lesão cística de paredes finas, lisas e bem delimitadas, compatível com pneumatocele.", "Derrame pleural loculado.", "Consolidação pulmonar com broncograma aéreo."], "correct": 1, "explain": "<b>Pneumatocele.</b> É um espaço aéreo cístico de <b>parede fina, lisa e regular</b>, tipicamente pós-infeccioso (clássico após pneumonia estafilocócica na criança) ou pós-traumático/ventilação. Forma-se por um mecanismo valvular: a inflamação/necrose lesa a parede bronquiolar, o ar entra na inspiração mas não sai completamente na expiração, distendendo um espaço distal. <b>Por que não as outras:</b> (A) descreve <i>abscesso</i> — parede espessa e irregular por necrose; (C) derrame loculado é opacidade de base pleural, não radiolucência; (D) consolidação é opacidade que apaga vasos, com broncograma aéreo. A pista decisiva aqui é 'parede fina e regular' + 'radiolucente' (cheia de ar)."}, {"img": "img/hc3/hc3-086.jpg", "cap": "TC de tórax, janela pulmonar. Área de aumento tênue da atenuação, com vasos e brônquios ainda visíveis no interior.", "q": "Na TC de tórax observa-se área em vidro fosco, mantendo a visualização dos vasos e brônquios em seu interior. Essa característica ocorre porque:", "opts": ["Há substituição completa do ar alveolar.", "Existe aumento parcial da atenuação pulmonar sem apagar vasos e brônquios.", "Ocorre destruição completa do parênquima.", "Há presença de ar na cavidade pleural."], "correct": 1, "explain": "<b>Vidro fosco = aumento PARCIAL da atenuação.</b> O achado depende de quanto ar resta no alvéolo. No vidro fosco o preenchimento alveolar é <b>incompleto</b> (líquido, células ou espessamento septal parcial), então resta ar suficiente para que a densidade suba um pouco — mas não o bastante para apagar as estruturas: vasos e brônquios <b>continuam visíveis</b> por dentro. Contraste com (A): substituição COMPLETA do ar = <i>consolidação</i>, que apaga os vasos. (C) destruição completa = enfisema/faveolamento; (D) ar na pleura = pneumotórax. Regra prática: <i>vejo os vasos através da opacidade → vidro fosco; não vejo → consolidação.</i>"}, {"img": "img/hc3/hc3-087.jpg", "cap": "TC axial, janela de mediastino. Cavidade de paredes espessas e irregulares com nível hidroaéreo no LSE.", "q": "Na TC axial em janela de mediastino observa-se cavidade de paredes espessas e irregulares contendo nível hidroaéreo no lobo superior esquerdo. O principal achado radiológico é:", "opts": ["Pneumatocele.", "Cavitação pulmonar com nível hidroaéreo.", "Enfisema centrolobular.", "Derrame pleural."], "correct": 1, "explain": "<b>Cavitação pulmonar</b> (padrão de abscesso). Os dois descritores decisivos são <b>paredes espessas e irregulares</b> e <b>nível hidroaéreo</b> (interface ar em cima / líquido/pus embaixo). Isso reflete necrose do parênquima com liquefação central e comunicação com a via aérea. <b>Diferença-chave da pneumatocele:</b> a pneumatocele tem parede FINA e regular; o abscesso/cavitação tem parede ESPESSA e irregular. (C) enfisema centrolobular são áreas hipodensas sem parede definida; (D) derrame é coleção pleural declive, não uma cavidade com nível dentro do parênquima."}, {"img": "img/hc3/hc3-088.jpg", "cap": "RX PA. Apagamento do seio costofrênico direito e opacidade com borda côncava superior (sinal do menisco).", "q": "Durante a avaliação sistemática da radiografia PA, observa-se apagamento do seio costofrênico direito e sinal do menisco. Esse conjunto de achados indica:", "opts": ["Pneumotórax.", "Derrame pleural livre.", "Atelectasia.", "Consolidação pulmonar."], "correct": 1, "explain": "<b>Derrame pleural livre.</b> O líquido, por gravidade, ocupa primeiro o ponto mais baixo — o <b>seio costofrênico</b>, apagando-o. A borda superior forma uma concavidade voltada para cima (mais alta lateralmente que medialmente): é o <b>sinal do menisco</b>, resultado da tensão superficial e da forma do espaço pleural. <b>Por que não:</b> pneumotórax daria hipertransparência sem trama vascular no ápice/lateral, não opacidade; atelectasia teria perda de volume com desvio do mediastino <i>para</i> o lado; consolidação teria broncograma aéreo e não respeitaria a concavidade pleural. Detalhe de prova: derrames pequenos (< 200-300 mL) só aparecem no seio costofrênico posterior no perfil — por isso o seio costofrênico é item obrigatório do roteiro."}, {"img": "img/hc3/hc3-089.jpg", "cap": "RX AP em expiração. Hemitórax direito com área hipertransparente e ausência de trama vascular periférica.", "q": "Na radiografia AP observa-se pneumotórax à direita. Qual característica radiográfica confirma esse diagnóstico?", "opts": ["Opacidade homogênea basal.", "Broncograma aéreo.", "Área hipertransparente sem visualização da trama vascular pulmonar.", "Desvio do mediastino para o mesmo lado."], "correct": 2, "explain": "<b>Pneumotórax = ar no espaço pleural.</b> O ar entre a pleura visceral e a parietal empurra o pulmão para o hilo. Radiograficamente: <b>área hipertransparente (muito escura) SEM trama vascular</b>, porque não há parênquima aerado nem vasos naquele espaço — apenas ar livre. Procura-se também a linha fina da pleura visceral. <b>Cuidado com (D):</b> no pneumotórax simples o mediastino não desvia ou desvia para o lado <i>oposto</i>; desvio contralateral + rebaixamento diafragmático = pneumotórax <b>hipertensivo</b> (emergência). A expiração forçada (como nesta imagem) é uma manobra que acentua pneumotórax pequeno, pois reduz o volume pulmonar e aumenta o contraste com o ar pleural."}, {"img": "img/hc3/hc3-090.jpg", "cap": "RX de tórax. Solução de continuidade na cortical da 6ª–8ª costelas esquerdas.", "q": "Na radiografia observa-se fratura deslocada da 6ª à 8ª costelas esquerdas. O principal achado radiográfico da fratura é:", "opts": ["Aumento da densidade medular.", "Interrupção da cortical óssea.", "Alargamento dos espaços intercostais.", "Osteopenia difusa."], "correct": 1, "explain": "<b>Interrupção (quebra) da cortical óssea.</b> A cortical é a camada externa densa e branca do osso; a fratura é definida radiograficamente pela <b>descontinuidade dessa linha cortical</b>, com ou sem desvio dos fragmentos. (A) aumento de densidade medular sugere lesão esclerótica/osteoblástica, não fratura aguda; (C) alargamento intercostal ocorre em hiperinsuflação, não define fratura; (D) osteopenia é redução difusa da densidade (osso mais 'apagado'), um contexto de fragilidade, não o sinal direto da fratura. Alerta clínico: fraturas de arcos inferiores (como 6ª–8ª) exigem procurar lesão de <b>vísceras abdominais</b> subjacentes (baço à esquerda, fígado à direita)."}, {"img": "img/hc3/hc3-091.jpg", "cap": "RX PA. Hiperinsuflação bilateral: campos pulmonares alargados e hipertransparentes.", "q": "A radiografia PA apresenta hiperinsuflação bilateral. Qual alteração anatômica é esperada?", "opts": ["Elevação das cúpulas diafragmáticas.", "Redução dos espaços intercostais.", "Rebaixamento das cúpulas diafragmáticas e tórax em barril.", "Apagamento do seio costofrênico."], "correct": 2, "explain": "<b>Rebaixamento (retificação) das cúpulas diafragmáticas + tórax em barril.</b> Na hiperinsuflação (enfisema/DPOC) o aprisionamento aéreo aumenta o volume pulmonar cronicamente: o diafragma é <b>empurrado para baixo e retificado</b> (perde a curva normal), os espaços intercostais <b>alargam</b>, o esterno se projeta anteriormente e o diâmetro ântero-posterior aumenta — o 'tórax em barril'. Também se vê aumento do espaço aéreo retroesternal no perfil e coração 'em gota' (alongado e verticalizado). As opções (A) e (B) descrevem exatamente o oposto do que ocorre."}, {"img": "img/hc3/hc3-092.jpg", "cap": "TC, janela pulmonar. Múltiplas áreas hipodensas por destruição das paredes alveolares.", "q": "Na TC em janela pulmonar observam-se múltiplas áreas hipodensas decorrentes da destruição dos alvéolos. Esse achado corresponde a:", "opts": ["Consolidação pulmonar.", "Fibrose pulmonar.", "Enfisema pulmonar.", "Derrame pleural."], "correct": 2, "explain": "<b>Enfisema pulmonar.</b> Há <b>destruição das paredes alveolares</b> com coalescência dos espaços aéreos, criando áreas <b>hipodensas (mais pretas que o pulmão normal)</b>, frequentemente sem parede visível (enfisema centrolobular) ou com parede tênue (paraseptal/bolhoso). É o oposto de consolidação (que é HIPERdensa por preenchimento). A fibrose mostraria faveolamento, bronquiectasias de tração e reticulado, com PERDA de volume; o derrame é coleção pleural. Fisiopatologia: perda de recolhimento elástico + destruição do leito capilar → distúrbio de troca e aprisionamento aéreo."}, {"img": "img/hc3/hc3-093.jpg", "cap": "Comparação didática consolidação × vidro fosco.", "q": "Qual característica diferencia consolidação pulmonar de opacidade em vidro fosco?", "opts": ["Ambas preservam completamente vasos e brônquios.", "Na consolidação ocorre apagamento dos vasos; no vidro fosco eles permanecem visíveis.", "Apenas o vidro fosco apresenta broncograma aéreo.", "Consolidação ocorre somente em infecções."], "correct": 1, "explain": "<b>A distinção é o grau de preenchimento alveolar e o que se enxerga por dentro da opacidade.</b> Na <b>consolidação</b> o espaço aéreo é preenchido por completo (pus, sangue, líquido, células) → densidade alta que <b>apaga os vasos</b> e costuma mostrar <b>broncograma aéreo</b> (brônquios ainda com ar contra o fundo opaco). No <b>vidro fosco</b> o preenchimento é parcial → densidade sobe pouco e os <b>vasos permanecem visíveis</b>. Por isso (C) está invertida: o broncograma aéreo é típico da CONSOLIDAÇÃO. (D) é falsa — consolidação tem múltiplas causas (edema, hemorragia, neoplasia lepídica, etc.), não só infecção."}, {"img": "img/hc3/hc3-094.jpg", "cap": "Homem 55a, dispneia súbita, dor pleurítica, SatO₂ 90%, edema em MID. AngioTC de tórax, janela de mediastino. Estruturas 1 e 2 assinaladas.", "q": "Assinale a alternativa que correlaciona corretamente os números 1 e 2 com as estruturas anatômicas e identifica o achado tomográfico principal:", "opts": ["1 – Artéria pulmonar direita; 2 – Veia cava superior. Achado: trombo em artéria pulmonar direita (defeito de enchimento central).", "1 – Veia cava superior; 2 – Artéria pulmonar direita. Achado: trombo em artéria pulmonar direita (defeito de enchimento intraluminal).", "1 – Aorta ascendente; 2 – Artéria pulmonar esquerda. Achado: derrame pericárdico comprimindo a artéria pulmonar.", "1 – Veia cava superior; 2 – Artéria pulmonar esquerda. Achado: embolia gordurosa com janela mediastino hiperdensa."], "correct": 1, "explain": "<b>Desafio de anatomia + achado (TEP).</b> Neste corte axial na altura do tronco/artérias pulmonares: <b>(1) veia cava superior</b> — estrutura oval à direita e anterior, que capta contraste vindo do MMSS; <b>(2) artéria pulmonar direita</b> — ramo que cursa horizontalmente para o hilo direito. O <b>defeito de enchimento intraluminal</b> (falha hipodensa dentro do vaso opacificado) é o achado direto de <b>tromboembolismo pulmonar</b>. A clínica fecha o raciocínio: dispneia súbita + dor pleurítica + hipoxemia + edema unilateral de membro (sugere TVP como fonte do êmbolo) = tríade de risco. (C) e (D) trazem estruturas/achados incompatíveis com a topografia e com a apresentação (não há gordura nem derrame comprimindo)."}];
+
+(function(){
+  const container = document.getElementById('avalimg-container');
+  const scoreBox = document.getElementById('avalimg-score');
+  let aScore = 0, aAnswered = 0;
+  avalImgData.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    const badge = '<span class="qimg-badge">Questão ' + (idx+1) + ' de ' + avalImgData.length + '</span>';
+    const imgHtml = '<div class="qimg-wrap"><img loading="lazy" src="' + item.img + '" alt="Imagem da questão ' + (idx+1) + '"><div class="qimg-cap">' + item.cap + '</div></div>';
+    card.innerHTML = badge + imgHtml + '<div style="margin-bottom:4px;"><strong>' + item.q + '</strong></div>';
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'quiz-opts';
+    const explainEl = document.createElement('div');
+    explainEl.className = 'quiz-explain';
+    explainEl.innerHTML = item.explain;
+    item.opts.forEach((optText, optIdx) => {
+      const b = document.createElement('button');
+      b.innerHTML = '<b>' + String.fromCharCode(65+optIdx) + ')</b> ' + optText;
+      b.addEventListener('click', () => {
+        if (b.dataset.locked) return;
+        Array.from(optsWrap.children).forEach(c => c.dataset.locked = '1');
+        if (optIdx === item.correct) { b.classList.add('correct'); aScore++; }
+        else { b.classList.add('wrong'); optsWrap.children[item.correct].classList.add('correct'); }
+        aAnswered++;
+        explainEl.style.display = 'block';
+        scoreBox.textContent = 'Acertos: ' + aScore + ' / ' + aAnswered;
+      });
+      optsWrap.appendChild(b);
+    });
+    card.appendChild(optsWrap);
+    card.appendChild(explainEl);
+    container.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
